@@ -28,13 +28,6 @@ ROOT = abspath(join(dirname(__file__), ".."))
 ##############################################################################
 BUILD_DIR = abspath(join(ROOT, "build"))
 
-# GCC ARM
-#GCC_ARM_PATH = "../../GNU_mbed_4.7_2013q3/bin"
-GCC_ARM_PATH = "../../GNU_mbed_4.7_2013q3/bin"
-
-# IAR
-IAR_PATH = "C:/Program Files (x86)/IAR Systems/Embedded Workbench 6.70.1/arm"
-
 BUILD_OPTIONS = []
 
 # mbed.org username
