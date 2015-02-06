@@ -26,7 +26,7 @@ static uint32_t ul_tickcount=0 ;
  * \brief Initialization of board components.
  *
  */
-void hardware_init( void )
+static void hardware_init( void )
 {
   // Assign the LED1 pin as OUTPUT
   LED1_PIO->PIO_OER = LED1_PIN ;
@@ -47,7 +47,7 @@ void hardware_init( void )
  * \brief Toggle the LED.
  *
  */
-void toggle_LED( void )
+static void toggle_LED( void )
 {
   if ( ul_toggle == 0 )
   {
@@ -77,7 +77,7 @@ void toggle_LED( void )
 void SysTick_Handler( void )
 {
   ul_tickcount++ ;
-  
+
   // Toggle LEDs every second (ie 1000ms)
   if ( ul_tickcount % 1000 == 0 )
   {

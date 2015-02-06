@@ -26,7 +26,7 @@ DEVICE = __SAM4S16C__
 CORE = cortex-m4
 
 OUTPUT_PATH = build_makefile
-OUTPUT_NAME = ex1_basic_led
+OUTPUT_NAME = ex2_basic_button
 OUTPUT_FILE = $(OUTPUT_NAME).elf
 OUTPUT_FILE_PATH = $(OUTPUT_PATH)/$(OUTPUT_FILE)
 
@@ -51,7 +51,7 @@ LDFLAGS = -mcpu=$(CORE) -mthumb -Wl,--cref -Wl,--check-sections -Wl,--gc-section
 VPATH = .
 
 OBJS += \
-$(OUTPUT_PATH)/ex1_basic_led.o \
+$(OUTPUT_PATH)/ex2_basic_button.o \
 $(OUTPUT_PATH)/startup_sam4s.o \
 $(OUTPUT_PATH)/system_sam4s.o
 
