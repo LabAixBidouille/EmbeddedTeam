@@ -18,13 +18,26 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
- * $Revision:    V2.00
+ * $Date:        9. May 2014
+ * $Revision:    V2.02
  *
  * Project:      I2C (Inter-Integrated Circuit) Driver definitions
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.02
+ *    Removed function ARM_I2C_MasterTransfer in order to simplify drivers
+ *      and added back parameter "xfer_pending" to functions
+ *      ARM_I2C_MasterTransmit and ARM_I2C_MasterReceive
+ *  Version 2.01
+ *    Added function ARM_I2C_MasterTransfer and removed parameter "xfer_pending"
+ *      from functions ARM_I2C_MasterTransmit and ARM_I2C_MasterReceive
+ *    Added function ARM_I2C_GetDataCount
+ *    Removed flag "address_nack" from ARM_I2C_STATUS
+ *    Replaced events ARM_I2C_EVENT_MASTER_DONE and ARM_I2C_EVENT_SLAVE_DONE
+ *      with event ARM_I2C_EVENT_TRANSFER_DONE
+ *    Added event ARM_I2C_EVENT_TRANSFER_INCOMPLETE
+ *    Removed parameter "arg" from function ARM_I2C_SignalEvent
  *  Version 2.00
  *    New simplified driver:
  *      complexity moved to upper layer (especially data handling)
@@ -36,14 +49,14 @@
  *    Namespace prefix ARM_ added
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_I2C_H
 #define __DRIVER_I2C_H
 
 #include "Driver_Common.h"
 
-#define ARM_I2C_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* API version */
+#define ARM_I2C_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,02)  /* API version */
 
 
 /****** I2C Control Codes *****/
@@ -71,25 +84,24 @@
 */
 typedef struct _ARM_I2C_STATUS {
   uint32_t busy             : 1;        ///< Busy flag
-  uint32_t mode             : 1;        ///< Mode = 0:Slave, 1:Master
-  uint32_t direction        : 1;        ///< Direction = 0:Transmitter, 1:Receiver
-  uint32_t general_call     : 1;        ///< General Call indication
-  uint32_t address_nack     : 1;        ///< Address not acknowledged from Slave (cleared on read)
-  uint32_t arbitration_lost : 1;        ///< Master lost arbitration (cleared on read)
-  uint32_t bus_error        : 1;        ///< Bus error detected (cleared on read)
+  uint32_t mode             : 1;        ///< Mode: 0=Slave, 1=Master
+  uint32_t direction        : 1;        ///< Direction: 0=Transmitter, 1=Receiver
+  uint32_t general_call     : 1;        ///< General Call indication (cleared on start of next Slave operation)
+  uint32_t arbitration_lost : 1;        ///< Master lost arbitration (cleared on start of next Master operation)
+  uint32_t bus_error        : 1;        ///< Bus error detected (cleared on start of next Master/Slave operation)
 } ARM_I2C_STATUS;
 
 
 /****** I2C Event *****/
-#define ARM_I2C_EVENT_MASTER_DONE       (1UL << 0)  ///< Master Transmit/Receive finished
-#define ARM_I2C_EVENT_SLAVE_DONE        (1UL << 1)  ///< Slave Transmit/Receive finished
-#define ARM_I2C_EVENT_SLAVE_TRANSMIT    (1UL << 2)  ///< Slave Transmit operation requested
-#define ARM_I2C_EVENT_SLAVE_RECEIVE     (1UL << 3)  ///< Slave Receive operation requested
-#define ARM_I2C_EVENT_GENERAL_CALL      (1UL << 4)  ///< General Call indication
-#define ARM_I2C_EVENT_ADDRESS_NACK      (1UL << 5)  ///< Address not acknowledged from Slave
-#define ARM_I2C_EVENT_ARBITRATION_LOST  (1UL << 6)  ///< Master lost arbitration
-#define ARM_I2C_EVENT_BUS_ERROR         (1UL << 7)  ///< Bus error detected (START/STOP at illegal position)
-#define ARM_I2C_EVENT_BUS_CLEAR         (1UL << 8)  ///< Bus clear finished
+#define ARM_I2C_EVENT_TRANSFER_DONE       (1UL << 0)  ///< Master/Slave Transmit/Receive finished
+#define ARM_I2C_EVENT_TRANSFER_INCOMPLETE (1UL << 1)  ///< Master/Slave Transmit/Receive incomplete transfer
+#define ARM_I2C_EVENT_SLAVE_TRANSMIT      (1UL << 2)  ///< Slave Transmit operation requested
+#define ARM_I2C_EVENT_SLAVE_RECEIVE       (1UL << 3)  ///< Slave Receive operation requested
+#define ARM_I2C_EVENT_ADDRESS_NACK        (1UL << 4)  ///< Address not acknowledged from Slave
+#define ARM_I2C_EVENT_GENERAL_CALL        (1UL << 5)  ///< General Call indication
+#define ARM_I2C_EVENT_ARBITRATION_LOST    (1UL << 6)  ///< Master lost arbitration
+#define ARM_I2C_EVENT_BUS_ERROR           (1UL << 7)  ///< Bus error detected (START/STOP at illegal position)
+#define ARM_I2C_EVENT_BUS_CLEAR           (1UL << 8)  ///< Bus clear finished
 
 
 // Function documentation
@@ -119,8 +131,8 @@ typedef struct _ARM_I2C_STATUS {
   \fn          int32_t ARM_I2C_MasterTransmit (uint32_t addr, const uint8_t *data, uint32_t num, bool xfer_pending)
   \brief       Start transmitting data as I2C Master.
   \param[in]   addr          Slave address (7-bit or 10-bit)
-  \param[in]   data          Pointer to buffer with data to send to I2C Slave
-  \param[in]   num           Number of data bytes to send
+  \param[in]   data          Pointer to buffer with data to transmit to I2C Slave
+  \param[in]   num           Number of data bytes to transmit
   \param[in]   xfer_pending  Transfer operation is pending - Stop condition will not be generated
   \return      \ref execution_status
 
@@ -134,33 +146,36 @@ typedef struct _ARM_I2C_STATUS {
 
   \fn          int32_t ARM_I2C_SlaveTransmit (const uint8_t *data, uint32_t num)
   \brief       Start transmitting data as I2C Slave.
-  \param[in]   data          Pointer to buffer with data to send to I2C Master
-  \param[in]   num           Number of data bytes to send
+  \param[in]   data  Pointer to buffer with data to transmit to I2C Master
+  \param[in]   num   Number of data bytes to transmit
   \return      \ref execution_status
 
   \fn          int32_t ARM_I2C_SlaveReceive (uint8_t *data, uint32_t num)
   \brief       Start receiving data as I2C Slave.
-  \param[out]  data          Pointer to buffer for data to receive from I2C Master
-  \param[in]   num           Number of data bytes to receive
+  \param[out]  data  Pointer to buffer for data to receive from I2C Master
+  \param[in]   num   Number of data bytes to receive
   \return      \ref execution_status
+
+  \fn          int32_t ARM_I2C_GetDataCount (void)
+  \brief       Get transferred data count.
+  \return      number of data bytes transferred; -1 when Slave is not addressed by Master
 
   \fn          int32_t ARM_I2C_Control (uint32_t control, uint32_t arg)
   \brief       Control I2C Interface.
-  \param[in]   control  operation
-  \param[in]   arg      argument of operation (optional) 
+  \param[in]   control  Operation
+  \param[in]   arg      Argument of operation (optional)
   \return      \ref execution_status
 
   \fn          ARM_I2C_STATUS ARM_I2C_GetStatus (void)
   \brief       Get I2C status.
   \return      I2C status \ref ARM_I2C_STATUS
 
-  \fn          void ARM_I2C_SignalEvent (uint32_t event, uint32_t arg)
+  \fn          void ARM_I2C_SignalEvent (uint32_t event)
   \brief       Signal I2C Events.
   \param[in]   event  \ref I2C_events notification mask
-  \param[in]   arg    optional argument of event 
 */
 
-typedef void (*ARM_I2C_SignalEvent_t) (uint32_t event, uint32_t arg);  ///< Pointer to \ref ARM_I2C_SignalEvent : Signal I2C Event.
+typedef void (*ARM_I2C_SignalEvent_t) (uint32_t event);  ///< Pointer to \ref ARM_I2C_SignalEvent : Signal I2C Event.
 
 
 /**
@@ -184,6 +199,7 @@ typedef struct _ARM_DRIVER_I2C {
   int32_t              (*MasterReceive)  (uint32_t addr,       uint8_t *data, uint32_t num, bool xfer_pending); ///< Pointer to \ref ARM_I2C_MasterReceive : Start receiving data as I2C Master.
   int32_t              (*SlaveTransmit)  (               const uint8_t *data, uint32_t num);                    ///< Pointer to \ref ARM_I2C_SlaveTransmit : Start transmitting data as I2C Slave.
   int32_t              (*SlaveReceive)   (                     uint8_t *data, uint32_t num);                    ///< Pointer to \ref ARM_I2C_SlaveReceive : Start receiving data as I2C Slave.
+  int32_t              (*GetDataCount)   (void);                                                                ///< Pointer to \ref ARM_I2C_GetDataCount : Get transferred data count.
   int32_t              (*Control)        (uint32_t control, uint32_t arg);                                      ///< Pointer to \ref ARM_I2C_Control : Control I2C Interface.
   ARM_I2C_STATUS       (*GetStatus)      (void);                                                                ///< Pointer to \ref ARM_I2C_GetStatus : Get I2C status.
 } const ARM_DRIVER_I2C;

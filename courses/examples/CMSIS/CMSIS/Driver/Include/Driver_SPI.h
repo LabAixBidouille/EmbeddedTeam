@@ -18,13 +18,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
- * $Revision:    V2.00
+ * $Date:        17. Apr 2014
+ * $Revision:    V2.01
  *
  * Project:      SPI (Serial Peripheral Interface) Driver definitions
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.01
+ *    Renamed status flag "tx_rx_busy" to "busy"
  *  Version 2.00
  *    New simplified driver:
  *      complexity moved to upper layer (especially data handling)
@@ -41,14 +43,14 @@
  *    Added "send_done_event" to Capabilities
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_SPI_H
 #define __DRIVER_SPI_H
 
 #include "Driver_Common.h"
 
-#define ARM_SPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* API version */
+#define ARM_SPI_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,00)  /* API version */
 
 
 /****** SPI Control Codes *****/
@@ -58,10 +60,10 @@
 
 /*----- SPI Control Codes: Mode -----*/
 #define ARM_SPI_MODE_INACTIVE           (0x00UL << ARM_SPI_CONTROL_Pos)     ///< SPI Inactive
-#define ARM_SPI_MODE_MASTER             (0x01UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master Output on MOSI, Input on MISO; arg = Bus Speed in bps
-#define ARM_SPI_MODE_SLAVE              (0x02UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  Output on MISO, Input on MOSI
-#define ARM_SPI_MODE_MASTER_SIMPLEX     (0x03UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master Output/Input on MOSI; arg = Bus Speed in bps
-#define ARM_SPI_MODE_SLAVE_SIMPLEX      (0x04UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  Output/Input on MISO
+#define ARM_SPI_MODE_MASTER             (0x01UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master (Output on MOSI, Input on MISO); arg = Bus Speed in bps
+#define ARM_SPI_MODE_SLAVE              (0x02UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  (Output on MISO, Input on MOSI)
+#define ARM_SPI_MODE_MASTER_SIMPLEX     (0x03UL << ARM_SPI_CONTROL_Pos)     ///< SPI Master (Output/Input on MOSI); arg = Bus Speed in bps
+#define ARM_SPI_MODE_SLAVE_SIMPLEX      (0x04UL << ARM_SPI_CONTROL_Pos)     ///< SPI Slave  (Output/Input on MISO)
 
 /*----- SPI Control Codes: Mode Parameters: Frame Format -----*/
 #define ARM_SPI_FRAME_FORMAT_Pos         8
@@ -101,7 +103,7 @@
 #define ARM_SPI_SET_BUS_SPEED           (0x10UL << ARM_SPI_CONTROL_Pos)     ///< Set Bus Speed in bps; arg = value
 #define ARM_SPI_GET_BUS_SPEED           (0x11UL << ARM_SPI_CONTROL_Pos)     ///< Get Bus Speed in bps
 #define ARM_SPI_SET_DEFAULT_TX_VALUE    (0x12UL << ARM_SPI_CONTROL_Pos)     ///< Set default Transmit value; arg = value
-#define ARM_SPI_CONTROL_SS              (0x13UL << ARM_SPI_CONTROL_Pos)     ///< Control Slave Select; arg = 0:inactive, 1:active 
+#define ARM_SPI_CONTROL_SS              (0x13UL << ARM_SPI_CONTROL_Pos)     ///< Control Slave Select; arg: 0=inactive, 1=active 
 #define ARM_SPI_ABORT_TRANSFER          (0x14UL << ARM_SPI_CONTROL_Pos)     ///< Abort current data transfer
 
 
@@ -122,9 +124,9 @@
 \brief SPI Status
 */
 typedef struct _ARM_SPI_STATUS {
-  uint32_t tx_rx_busy : 1;              ///< Transmitter/Receiver busy flag
-  uint32_t data_lost  : 1;              ///< Data lost: Receive overflow / Transmit underflow (cleared on read)
-  uint32_t mode_fault : 1;              ///< Mode fault detected; optional (cleared on read)
+  uint32_t busy       : 1;              ///< Transmitter/Receiver busy flag
+  uint32_t data_lost  : 1;              ///< Data lost: Receive overflow / Transmit underflow (cleared on start of transfer operation)
+  uint32_t mode_fault : 1;              ///< Mode fault detected; optional (cleared on start of transfer operation)
 } ARM_SPI_STATUS;
 
 
@@ -147,7 +149,7 @@ typedef struct _ARM_SPI_STATUS {
   \fn          int32_t ARM_SPI_Initialize (ARM_SPI_SignalEvent_t cb_event)
   \brief       Initialize SPI Interface.
   \param[in]   cb_event  Pointer to \ref ARM_SPI_SignalEvent
-  \return      common \ref execution_status and driver specific \ref spi_execution_status
+  \return      \ref execution_status
 
   \fn          int32_t ARM_SPI_Uninitialize (void)
   \brief       De-initialize SPI Interface.
@@ -156,19 +158,19 @@ typedef struct _ARM_SPI_STATUS {
   \fn          int32_t ARM_SPI_PowerControl (ARM_POWER_STATE state)
   \brief       Control SPI Interface Power.
   \param[in]   state  Power state
-  \return      common \ref execution_status and driver specific \ref spi_execution_status
+  \return      \ref execution_status
 
   \fn          int32_t ARM_SPI_Send (const void *data, uint32_t num)
   \brief       Start sending data to SPI transmitter.
   \param[in]   data  Pointer to buffer with data to send to SPI transmitter
   \param[in]   num   Number of data items to send
-  \return      common \ref execution_status and driver specific \ref spi_execution_status
+  \return      \ref execution_status
 
   \fn          int32_t ARM_SPI_Receive (void *data, uint32_t num)
   \brief       Start receiving data from SPI receiver.
   \param[out]  data  Pointer to buffer for data to receive from SPI receiver
   \param[in]   num   Number of data items to receive
-  \return      common \ref execution_status and driver specific \ref spi_execution_status
+  \return      \ref execution_status
 
   \fn          int32_t ARM_SPI_Transfer (const void *data_out,
                                                void *data_in,
@@ -177,7 +179,7 @@ typedef struct _ARM_SPI_STATUS {
   \param[in]   data_out  Pointer to buffer with data to send to SPI transmitter
   \param[out]  data_in   Pointer to buffer for data to receive from SPI receiver
   \param[in]   num       Number of data items to transfer
-  \return      common \ref execution_status and driver specific \ref spi_execution_status
+  \return      \ref execution_status
 
   \fn          uint32_t ARM_SPI_GetDataCount (void)
   \brief       Get transferred data count.
@@ -185,8 +187,8 @@ typedef struct _ARM_SPI_STATUS {
 
   \fn          int32_t ARM_SPI_Control (uint32_t control, uint32_t arg)
   \brief       Control SPI Interface.
-  \param[in]   control  operation
-  \param[in]   arg      argument of operation (optional) 
+  \param[in]   control  Operation
+  \param[in]   arg      Argument of operation (optional)
   \return      common \ref execution_status and driver specific \ref spi_execution_status
 
   \fn          ARM_SPI_STATUS ARM_SPI_GetStatus (void)
@@ -206,9 +208,9 @@ typedef void (*ARM_SPI_SignalEvent_t) (uint32_t event);  ///< Pointer to \ref AR
 \brief SPI Driver Capabilities.
 */
 typedef struct _ARM_SPI_CAPABILITIES {
-  uint32_t simplex          : 1;        ///< Simplex Mode (Master and Slave)
-  uint32_t ti_ssi           : 1;        ///< TI Synchronous Serial Interface
-  uint32_t microwire        : 1;        ///< Microwire Interface
+  uint32_t simplex          : 1;        ///< supports Simplex Mode (Master and Slave)
+  uint32_t ti_ssi           : 1;        ///< supports TI Synchronous Serial Interface
+  uint32_t microwire        : 1;        ///< supports Microwire Interface
   uint32_t event_mode_fault : 1;        ///< Signal Mode Fault event: \ref ARM_SPI_EVENT_MODE_FAULT
 } ARM_SPI_CAPABILITIES;
 

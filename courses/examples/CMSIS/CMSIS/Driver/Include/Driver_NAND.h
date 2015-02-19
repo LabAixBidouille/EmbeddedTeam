@@ -18,276 +18,358 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
- * $Revision:    V1.11
+ * $Date:        30. May 2014
+ * $Revision:    V2.01
  *
  * Project:      NAND Flash Driver definitions
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.01
+ *    Updated ARM_NAND_ECC_INFO structure and ARM_NAND_ECC_xxx definitions
+ *  Version 2.00
+ *    New simplified driver:
+ *      complexity moved to upper layer (command agnostic)
+ *    Added support for:
+ *      NV-DDR & NV-DDR2 Interface (ONFI specification)
+ *      VCC, VCCQ and VPP Power Supply Control
+ *      WP (Write Protect) Control
  *  Version 1.11
  *    Changed prefix ARM_DRV -> ARM_DRIVER
  *  Version 1.10
  *    Namespace prefix ARM_ added
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_NAND_H
 #define __DRIVER_NAND_H
 
 #include "Driver_Common.h"
 
-#define ARM_NAND_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1,11)  /* API version */
+#define ARM_NAND_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,01)  /* API version */
+
+
+/****** NAND Device Power *****/
+#define ARM_NAND_POWER_VCC_Pos           0
+#define ARM_NAND_POWER_VCC_Msk          (0x07UL << ARM_NAND_POWER_VCC_Pos)
+#define ARM_NAND_POWER_VCC_OFF          (0x01UL << ARM_NAND_POWER_VCC_Pos)  ///< VCC Power off
+#define ARM_NAND_POWER_VCC_3V3          (0x02UL << ARM_NAND_POWER_VCC_Pos)  ///< VCC = 3.3V
+#define ARM_NAND_POWER_VCC_1V8          (0x03UL << ARM_NAND_POWER_VCC_Pos)  ///< VCC = 1.8V
+#define ARM_NAND_POWER_VCCQ_Pos          3
+#define ARM_NAND_POWER_VCCQ_Msk         (0x07UL << ARM_NAND_POWER_VCCQ_Pos)
+#define ARM_NAND_POWER_VCCQ_OFF         (0x01UL << ARM_NAND_POWER_VCCQ_Pos) ///< VCCQ I/O Power off
+#define ARM_NAND_POWER_VCCQ_3V3         (0x02UL << ARM_NAND_POWER_VCCQ_Pos) ///< VCCQ = 3.3V
+#define ARM_NAND_POWER_VCCQ_1V8         (0x03UL << ARM_NAND_POWER_VCCQ_Pos) ///< VCCQ = 1.8V
+#define ARM_NAND_POWER_VPP_OFF          (1UL << 6)                          ///< VPP off
+#define ARM_NAND_POWER_VPP_ON           (1Ul << 7)                          ///< VPP on
+
+
+/****** NAND Control Codes *****/
+#define ARM_NAND_BUS_MODE               (0x01)      ///< Set Bus Mode as specified with arg
+#define ARM_NAND_BUS_DATA_WIDTH         (0x02)      ///< Set Bus Data Width as specified with arg
+#define ARM_NAND_DRIVER_STRENGTH        (0x03)      ///< Set Driver Strength as specified with arg
+#define ARM_NAND_DEVICE_READY_EVENT     (0x04)      ///< Generate \ref ARM_NAND_EVENT_DEVICE_READY; arg: 0=disabled (default), 1=enabled 
+#define ARM_NAND_DRIVER_READY_EVENT     (0x05)      ///< Generate \ref ARM_NAND_EVENT_DRIVER_READY; arg: 0=disabled (default), 1=enabled 
+
+/*----- NAND Bus Mode (ONFI - Open NAND Flash Interface) -----*/
+#define ARM_NAND_BUS_INTERFACE_Pos       4
+#define ARM_NAND_BUS_INTERFACE_Msk      (0x03UL << ARM_NAND_BUS_INTERFACE_Pos)
+#define ARM_NAND_BUS_SDR                (0x00UL << ARM_NAND_BUS_INTERFACE_Pos)    ///< Data Interface:    SDR  (Single Data Rate) - Traditional interface (default)
+#define ARM_NAND_BUS_DDR                (0x01UL << ARM_NAND_BUS_INTERFACE_Pos)    ///< Data Interface: NV-DDR  (Double Data Rate)
+#define ARM_NAND_BUS_DDR2               (0x02UL << ARM_NAND_BUS_INTERFACE_Pos)    ///< Data Interface: NV-DDR2 (Double Data Rate)
+#define ARM_NAND_BUS_TIMING_MODE_Pos     0
+#define ARM_NAND_BUS_TIMING_MODE_Msk    (0x0FUL << ARM_NAND_BUS_TIMING_MODE_Pos)
+#define ARM_NAND_BUS_TIMING_MODE_0      (0x00UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 0 (default)
+#define ARM_NAND_BUS_TIMING_MODE_1      (0x01UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 1
+#define ARM_NAND_BUS_TIMING_MODE_2      (0x02UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 2
+#define ARM_NAND_BUS_TIMING_MODE_3      (0x03UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 3
+#define ARM_NAND_BUS_TIMING_MODE_4      (0x04UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 4 (SDR EDO capable)
+#define ARM_NAND_BUS_TIMING_MODE_5      (0x05UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 5 (SDR EDO capable)
+#define ARM_NAND_BUS_TIMING_MODE_6      (0x06UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 6 (NV-DDR2 only)
+#define ARM_NAND_BUS_TIMING_MODE_7      (0x07UL << ARM_NAND_BUS_TIMING_MODE_Pos)  ///< Timing Mode 7 (NV-DDR2 only)
+#define ARM_NAND_BUS_DDR2_DO_WCYC_Pos    8
+#define ARM_NAND_BUS_DDR2_DO_WCYC_Msk   (0x0FUL << ARM_NAND_BUS_DDR2_DO_WCYC_Pos)
+#define ARM_NAND_BUS_DDR2_DO_WCYC_0     (0x00UL << ARM_NAND_BUS_DDR2_DO_WCYC_Pos) ///< DDR2 Data Output Warmup cycles: 0 (default)
+#define ARM_NAND_BUS_DDR2_DO_WCYC_1     (0x01UL << ARM_NAND_BUS_DDR2_DO_WCYC_Pos) ///< DDR2 Data Output Warmup cycles: 1
+#define ARM_NAND_BUS_DDR2_DO_WCYC_2     (0x02UL << ARM_NAND_BUS_DDR2_DO_WCYC_Pos) ///< DDR2 Data Output Warmup cycles: 2
+#define ARM_NAND_BUS_DDR2_DO_WCYC_4     (0x03UL << ARM_NAND_BUS_DDR2_DO_WCYC_Pos) ///< DDR2 Data Output Warmup cycles: 4
+#define ARM_NAND_BUS_DDR2_DI_WCYC_Pos    12
+#define ARM_NAND_BUS_DDR2_DI_WCYC_Msk   (0x0FUL << ARM_NAND_BUS_DDR2_DI_WCYC_Pos)
+#define ARM_NAND_BUS_DDR2_DI_WCYC_0     (0x00UL << ARM_NAND_BUS_DDR2_DI_WCYC_Pos) ///< DDR2 Data Input Warmup cycles: 0 (default)
+#define ARM_NAND_BUS_DDR2_DI_WCYC_1     (0x01UL << ARM_NAND_BUS_DDR2_DI_WCYC_Pos) ///< DDR2 Data Input Warmup cycles: 1
+#define ARM_NAND_BUS_DDR2_DI_WCYC_2     (0x02UL << ARM_NAND_BUS_DDR2_DI_WCYC_Pos) ///< DDR2 Data Input Warmup cycles: 2
+#define ARM_NAND_BUS_DDR2_DI_WCYC_4     (0x03UL << ARM_NAND_BUS_DDR2_DI_WCYC_Pos) ///< DDR2 Data Input Warmup cycles: 4
+#define ARM_NAND_BUS_DDR2_VEN           (1UL << 16)                               ///< DDR2 Enable external VREFQ as reference
+#define ARM_NAND_BUS_DDR2_CMPD          (1UL << 17)                               ///< DDR2 Enable complementary DQS (DQS_c) signal
+#define ARM_NAND_BUS_DDR2_CMPR          (1UL << 18)                               ///< DDR2 Enable complementary RE_n (RE_c) signal
+
+/*----- NAND Data Bus Width -----*/
+#define ARM_NAND_BUS_DATA_WIDTH_8       (0x00)      ///< Bus Data Width:  8 bit (default)
+#define ARM_NAND_BUS_DATA_WIDTH_16      (0x01)      ///< Bus Data Width: 16 bit
+
+/*----- NAND Driver Strength (ONFI - Open NAND Flash Interface) -----*/
+#define ARM_NAND_DRIVER_STRENGTH_18     (0x00)      ///< Driver Strength 2.0x = 18 Ohms
+#define ARM_NAND_DRIVER_STRENGTH_25     (0x01)      ///< Driver Strength 1.4x = 25 Ohms
+#define ARM_NAND_DRIVER_STRENGTH_35     (0x02)      ///< Driver Strength 1.0x = 35 Ohms (default)
+#define ARM_NAND_DRIVER_STRENGTH_50     (0x03)      ///< Driver Strength 0.7x = 50 Ohms
+
+
+/****** NAND ECC for Read/Write Data Mode and Sequence Execution Code *****/
+#define ARM_NAND_ECC_INDEX_Pos           0
+#define ARM_NAND_ECC_INDEX_Msk          (0xFFUL << ARM_NAND_ECC_INDEX_Pos)
+#define ARM_NAND_ECC(n)                 ((n) & ARM_NAND_ECC_INDEX_Msk)     ///< Select ECC
+#define ARM_NAND_ECC0                   (1UL << 8)                         ///< Use ECC0 of selected ECC
+#define ARM_NAND_ECC1                   (1UL << 9)                         ///< Use ECC1 of selected ECC
+
+/****** NAND Flag for Read/Write Data Mode and Sequence Execution Code *****/
+#define ARM_NAND_DRIVER_DONE_EVENT      (1UL << 16) ///< Generate \ref ARM_NAND_EVENT_DRIVER_DONE
+
+/****** NAND Sequence Execution Code *****/
+#define ARM_NAND_CODE_SEND_CMD1         (1UL << 17) ///< Send Command 1
+#define ARM_NAND_CODE_SEND_ADDR_COL1    (1UL << 18) ///< Send Column Address 1
+#define ARM_NAND_CODE_SEND_ADDR_COL2    (1UL << 19) ///< Send Column Address 2
+#define ARM_NAND_CODE_SEND_ADDR_ROW1    (1UL << 20) ///< Send Row Address 1
+#define ARM_NAND_CODE_SEND_ADDR_ROW2    (1UL << 21) ///< Send Row Address 2
+#define ARM_NAND_CODE_SEND_ADDR_ROW3    (1UL << 22) ///< Send Row Address 3
+#define ARM_NAND_CODE_INC_ADDR_ROW      (1UL << 23) ///< Auto-increment Row Address
+#define ARM_NAND_CODE_WRITE_DATA        (1UL << 24) ///< Write Data
+#define ARM_NAND_CODE_SEND_CMD2         (1UL << 25) ///< Send Command 2
+#define ARM_NAND_CODE_WAIT_BUSY         (1UL << 26) ///< Wait while R/Bn busy
+#define ARM_NAND_CODE_READ_DATA         (1UL << 27) ///< Read Data
+#define ARM_NAND_CODE_SEND_CMD3         (1UL << 28) ///< Send Command 3
+#define ARM_NAND_CODE_READ_STATUS       (1UL << 29) ///< Read Status byte and check FAIL bit (bit 0)
+
+/*----- NAND Sequence Execution Code: Command -----*/
+#define ARM_NAND_CODE_CMD1_Pos           0
+#define ARM_NAND_CODE_CMD1_Msk          (0xFFUL << ARM_NAND_CODE_CMD1_Pos)
+#define ARM_NAND_CODE_CMD2_Pos           8
+#define ARM_NAND_CODE_CMD2_Msk          (0xFFUL << ARM_NAND_CODE_CMD2_Pos)
+#define ARM_NAND_CODE_CMD3_Pos           16
+#define ARM_NAND_CODE_CMD3_Msk          (0xFFUL << ARM_NAND_CODE_CMD3_Pos)
+
+/*----- NAND Sequence Execution Code: Column Address -----*/
+#define ARM_NAND_CODE_ADDR_COL1_Pos      0
+#define ARM_NAND_CODE_ADDR_COL1_Msk     (0xFFUL << ARM_NAND_CODE_ADDR_COL1_Pos)
+#define ARM_NAND_CODE_ADDR_COL2_Pos      8
+#define ARM_NAND_CODE_ADDR_COL2_Msk     (0xFFUL << ARM_NAND_CODE_ADDR_COL2_Pos)
+
+/*----- NAND Sequence Execution Code: Row Address -----*/
+#define ARM_NAND_CODE_ADDR_ROW1_Pos      0
+#define ARM_NAND_CODE_ADDR_ROW1_Msk     (0xFFUL << ARM_NAND_CODE_ADDR_ROW1_Pos)
+#define ARM_NAND_CODE_ADDR_ROW2_Pos      8
+#define ARM_NAND_CODE_ADDR_ROW2_Msk     (0xFFUL << ARM_NAND_CODE_ADDR_ROW2_Pos)
+#define ARM_NAND_CODE_ADDR_ROW3_Pos      16
+#define ARM_NAND_CODE_ADDR_ROW3_Msk     (0xFFUL << ARM_NAND_CODE_ADDR_ROW3_Pos)
+
+
+/****** NAND specific error codes *****/
+#define ARM_NAND_ERROR_ECC              (ARM_DRIVER_ERROR_SPECIFIC - 1)     ///< ECC generation/correction failed
 
 
 /**
-\brief NAND Page Layout configuration
+\brief NAND ECC (Error Correction Code) Information
 */
-typedef struct _ARM_NAND_PAGE_LAYOUT {
-  struct {
-    uint8_t  ofs_lsn;                     ///< LSN position, where logical sector number (LSN) is placed. Usually, this is the first byte of Spare and has the value 0. LSN is a 32-bit value.
-    uint8_t  ofs_dcm;                     ///< Page Data corrupted marker. Usually, this byte is the 5-th byte of Spare and has the value 4.
-    uint8_t  ofs_bbm;                     ///< Bad Block marker position. Is usually placed as the 6-th byte of Spare and has the value 5.
-    uint8_t  ofs_ecc;                     ///< Position of the first byte of Error Correction Code (ECC). Is usually the 7-th byte of Spare and has the value 6. This value is used by flash translation layer only if ECC is encoded and decoded in software.
-  } spare;                                ///< Structure spare
-  uint16_t spare_ofs;                     ///< Spare area offset from beginning of the page.
-  uint16_t spare_inc;                     ///< Column increment till next spare. If page contains multiple sectors, then the first byte of the first spare area is determined by reading spare_ofs value. Location of the first byte of the second spare is (spare_inc + spare_ofs).
-  uint16_t sector_inc;                    ///< Column increment till next sector. If page contains multiple sectors, then the first sector always starts at the beginning of the page (byte zero). Second sector starts at sect_inc, third sector at (sect_inc + sect_inc) and so on.
-} ARM_NAND_PAGE_LAYOUT;
-
-/**
-\brief NAND Flash Device information
-*/
-typedef struct _ARM_NAND_DEVICE {
-  ARM_NAND_PAGE_LAYOUT *page_layout;      ///< Page Layout configuration   
-  uint8_t               type;             ///< \ref ARM_NAND_TYPE 
-  uint8_t               device_number;    ///< Device number (chip select)
-  uint16_t              page_size;        ///< Page Size in bytes
-  uint32_t              block_count;      ///< Number of Blocks in Device
-  uint16_t              page_count;       ///< Number of Pages per Block
-  uint16_t              block_sectors;    ///< Number of Sectors per Block
-  uint8_t               page_sectors;     ///< Number of Sectors per Page  
-  uint8_t               row_cycles;       ///< Number of Row address cycles  
-  uint8_t               col_cycles;       ///< Number of Column address cycles  
-  uint8_t               sw_ecc;           ///< value > 0: error correction code (ECC) encoding/decoding enabled in software: \n value = 0: Software ECC disabled \n value = 1: Hamming ECC algorithm enabled in software.
-} const ARM_NAND_DEVICE;
-
-/**
-\brief Mandatory NAND Flash Commands (ONFI V1.0 or higher)
-*/
-typedef enum _ARM_NAND_COMMAND {
-  ARM_NAND_CMD_READ_1ST          = 0x00,  ///< Read 1st Cycle
-  ARM_NAND_CMD_CHANGE_RD_COL_1ST = 0x05,  ///< Change Read Column 1st Cycle
-  ARM_NAND_CMD_PROGRAM_2ND       = 0x10,  ///< Page Program 2nd Cycle
-  ARM_NAND_CMD_READ_2ND          = 0x30,  ///< Read 2nd Cycle
-  ARM_NAND_CMD_ERASE_1ST         = 0x60,  ///< Block Erase 1st Cycle
-  ARM_NAND_CMD_STATUS            = 0x70,  ///< Read Status
-  ARM_NAND_CMD_PROGRAM_1ST       = 0x80,  ///< Page Program 1st Cycle
-  ARM_NAND_CMD_CHANGE_WR_COL     = 0x85,  ///< Change Write Column
-  ARM_NAND_CMD_READ_ID           = 0x90,  ///< Read ID
-  ARM_NAND_CMD_ERASE_2ND         = 0xD0,  ///< Block Erase 2nd cycle
-  ARM_NAND_CMD_CHANGE_RD_COL_2ND = 0xE0,  ///< Change Read Column 2nd Cycle
-  ARM_NAND_CMD_READ_PARAM_PAGE   = 0xEC,  ///< Read Parameter Page
-  ARM_NAND_CMD_RESET             = 0xFF   ///< Reset Command
-} ARM_NAND_COMMAND;
-
-/**
-\brief Optional NAND Flash Commands (ONFI V1.0 or higher)
-*/
-typedef enum _ARM_NAND_COMMAND_OPTIONAL {
-  ARM_NAND_CMD_COPYBACK_READ_1ST      = 0x00, ///< Copyback Read 1st Cycle
-  ARM_NAND_CMD_COPYBACK_READ_2ND      = 0x35, ///< Copyback Read 2nd Cycle
-  ARM_NAND_CMD_READ_CACHE_SEQUENTIAL  = 0x31, ///< Read Cache Sequential
-  ARM_NAND_CMD_READ_CACHE_END         = 0x3F, ///< Read Cache End
-  ARM_NAND_CMD_READ_STATUS_ENHANCED   = 0x78, ///< Read Status Enhanced
-  ARM_NAND_CMD_PAGE_CACHE_PROGRAM_1ST = 0x80, ///< Page Cache Program 1st Cycle
-  ARM_NAND_CMD_PAGE_CACHE_PROGRAM_2ND = 0x15, ///< Page Cache Program 2nd Cycle
-  ARM_NAND_CMD_COPYBACK_PROGRAM_1ST   = 0x85, ///< Copyback Program 1st Cycle
-  ARM_NAND_CMD_COPYBACK_PROGRAM_2ND   = 0x10, ///< Copyback Program 2nd Cycle
-  ARM_NAND_CMD_READ_UNIQUE_ID         = 0xED, ///< Read Unique ID
-  ARM_NAND_CMD_GET_FEATURES           = 0xEE, ///< Get Features
-  ARM_NAND_CMD_SET_FEATURES           = 0xEF  ///< Set Features
-} ARM_NAND_COMMAND_OPTIONAL;
-
-// NAND Status Flags Masks (ONFI V1.0 or higher)
-#define ARM_NAND_STAT_FAIL        0x01    ///< Last command failed
-#define ARM_NAND_STAT_FAILC       0x02    ///< Command prior last failed
-#define ARM_NAND_STAT_CSP         0x08    ///< Command specific
-#define ARM_NAND_STAT_VSP         0x10    ///< Vendor specific
-#define ARM_NAND_STAT_ARDY        0x20    ///< Array operation in progress
-#define ARM_NAND_STAT_RDY         0x40    ///< LUN ready for another command
-#define ARM_NAND_STAT_WP          0x80    ///< Write protected
-
-// NAND ID addresses (ONFI V1.0 or higher)
-#define ARM_NAND_ID_ADDR_ONFI     0x20    ///< ONFI signature address for Read ID command
-#define ARM_NAND_ID_ADDR_JEDEC    0x00    ///< JEDEC signature address for the Read ID command
+typedef struct _ARM_NAND_ECC_INFO {
+  uint32_t type             :  2;       ///< Type: 1=ECC0 over Data, 2=ECC0 over Data+Spare, 3=ECC0 over Data and ECC1 over Spare
+  uint32_t page_layout      :  1;       ///< Page layout: 0=|Data0|Spare0|...|DataN-1|SpareN-1|, 1=|Data0|...|DataN-1|Spare0|...|SpareN-1|
+  uint32_t page_count       :  3;       ///< Number of virtual pages: N = 2 ^ page_count
+  uint32_t page_size        :  4;       ///< Virtual Page size (Data+Spare): 0=512+16, 1=1k+32, 2=2k+64, 3=4k+128, 4=8k+256, 8=512+28, 9=1k+56, 10=2k+112, 11=4k+224, 12=8k+448
+  uint32_t reserved         : 14;       ///< Reserved (must be zero)
+  uint32_t correctable_bits :  8;       ///< Number of correctable bits (based on 512 byte codeword size)
+  uint16_t codeword_size [2];           ///< Number of bytes over which ECC is calculated
+  uint16_t ecc_size      [2];           ///< ECC size in bytes (rounded up)
+  uint16_t ecc_offset    [2];           ///< ECC offset in bytes (where ECC starts in Spare area) 
+} ARM_NAND_ECC_INFO;
 
 
 /**
-\brief NAND Flash Device Type
+\brief NAND Status
 */
-typedef enum _ARM_NAND_TYPE {
-  ARM_NAND_TYPE_RAW_NAND = 0,             ///< Raw NAND Flash device
-  ARM_NAND_TYPE_EZ_NAND  = 1,             ///< NAND Flash device with integrated ECC
-  ARM_NAND_TYPE_ONENAND  = 2,             ///< OneNAND Flash device
-} ARM_NAND_TYPE;
-
-
-/**
-\brief NAND Flash Driver Status
-*/
-typedef enum _ARM_NAND_STATUS {
-  ARM_NAND_OK             =  0,           ///< No error
-  ARM_NAND_ECC_CORRECTED  =  1,           ///< ECC corrected the data
-  ARM_NAND_ECC_FAILED     =  2,           ///< ECC could not correct the data
-  ARM_NAND_PROGRAM_FAILED =  3,           ///< Programming failed
-  ARM_NAND_ERASE_FAILED   =  4,           ///< Erase verify failed
-  ARM_NAND_TIMEOUT        =  5,           ///< NAND hardware timeout
-  ARM_NAND_UNSUPPORTED    =  6,           ///< Functionality not supported
-  ARM_NAND_ERROR          =  7            ///< Unspecified error
+typedef struct _ARM_NAND_STATUS {
+  uint32_t busy      : 1;               ///< Driver busy flag
+  uint32_t ecc_error : 1;               ///< ECC error detected (cleared on next Read/WriteData or ExecuteSequence)
 } ARM_NAND_STATUS;
+
+
+/****** NAND Event *****/
+#define ARM_NAND_EVENT_DEVICE_READY     (1UL << 0)  ///< Device Ready: R/Bn rising edge
+#define ARM_NAND_EVENT_DRIVER_READY     (1UL << 1)  ///< Driver Ready
+#define ARM_NAND_EVENT_DRIVER_DONE      (1UL << 2)  ///< Driver operation done
+#define ARM_NAND_EVENT_ECC_ERROR        (1UL << 3)  ///< ECC could not correct data
 
 
 // Function documentation
 /**
-  \fn          ARM_DRIVER_VERSION ARM_NAND_GetVersion (void)
-  \brief       Get driver version.
-  \return      \ref ARM_DRIVER_VERSION
+  \fn            ARM_DRIVER_VERSION ARM_NAND_GetVersion (void)
+  \brief         Get driver version.
+  \return        \ref ARM_DRIVER_VERSION
 */
 /**
-  \fn          ARM_NAND_CAPABILITIES ARM_NAND_GetCapabilities (void)
-  \brief       Get driver capabilities.
-  \return      \ref ARM_NAND_CAPABILITIES
+  \fn            ARM_NAND_CAPABILITIES ARM_NAND_GetCapabilities (void)
+  \brief         Get driver capabilities.
+  \return        \ref ARM_NAND_CAPABILITIES
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_Initialize (ARM_NAND_SignalEvent_t  cb_event,
-                                                    ARM_NAND_DEVICE        *ptr_device,
-                                                    uint32_t                num_devices)
-  \brief       Initialize NAND Interface.
-  \param[in]   cb_event    Pointer to \ref ARM_NAND_SignalEvent
-  \param[in]   ptr_device  Pointer to device information
-  \param[in]   num_devices Number of devices
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_Initialize (ARM_NAND_SignalEvent_t cb_event)
+  \brief         Initialize the NAND Interface.
+  \param[in]     cb_event  Pointer to \ref ARM_NAND_SignalEvent
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_Uninitialize (void)
-  \brief       De-initialize NAND Interface.
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_Uninitialize (void)
+  \brief         De-initialize the NAND Interface.
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_PowerControl (ARM_POWER_STATE state)
-  \brief       Control the NAND interface power.
-  \param[in]   state    Power state
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_PowerControl (ARM_POWER_STATE state)
+  \brief         Control the NAND interface power.
+  \param[in]     state  Power state
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_ResetDevice (uint32_t dev_num)
-  \brief       Reset a NAND device.
-  \param[in]   dev_num   Device number
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_DevicePower (uint32_t voltage)
+  \brief         Set device power supply voltage.
+  \param[in]     voltage  NAND Device supply voltage
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_ReadID (uint32_t  dev_num,
-                                                uint8_t   addr,
-                                                uint8_t  *buf,
-                                                uint32_t  len)
-  \brief       Read NAND device ID.
-  \param[in]   dev_num   Device number
-  \param[in]   addr      ID address
-  \param[out]  buf       Buffer for data read from NAND
-  \param[in]   len       Number of bytes to read (buffer length)
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_WriteProtect (uint32_t dev_num, bool enable)
+  \brief         Control WPn (Write Protect).
+  \param[in]     dev_num  Device number
+  \param[in]     enable
+                - \b false Write Protect off
+                - \b true  Write Protect on
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_ReadParamPage (uint32_t  dev_num,
-                                                       uint32_t  col,
-                                                       uint8_t  *buf,
-                                                       uint32_t  len)
-  \brief       Read NAND parameter page.
-  \param[in]   dev_num   Device number
-  \param[in]   col       Column address
-  \param[out]  buf       Buffer for data read from NAND
-  \param[in]   len       Number of bytes to read (buffer length)
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_ChipEnable (uint32_t dev_num, bool enable)
+  \brief         Control CEn (Chip Enable).
+  \param[in]     dev_num  Device number
+  \param[in]     enable
+                - \b false Chip Enable off
+                - \b true  Chip Enable on
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_ReadPage (uint32_t  dev_num,
-                                                  uint32_t  row,
-                                                  uint32_t  col,
-                                                  uint8_t  *buf,
-                                                  uint32_t  len)
-  \brief       Read data from NAND page.
-  \param[in]   dev_num   Device number
-  \param[in]   row       Row address
-  \param[in]   col       Column address
-  \param[out]  buf       Buffer for data read from NAND
-  \param[in]   len       Number of bytes to read (buffer length)
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_GetDeviceBusy (uint32_t dev_num)
+  \brief         Get Device Busy pin state.
+  \param[in]     dev_num  Device number
+  \return        1=busy, 0=not busy, or error
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_WritePage (      uint32_t  dev_num,
-                                                         uint32_t  row,
-                                                         uint32_t  col,
-                                                   const uint8_t  *buf,
-                                                         uint32_t  len)
-  \brief       Write data to NAND page.
-  \param[in]   dev_num   Device number
-  \param[in]   row       Row address
-  \param[in]   col       Column address
-  \param[out]  buf       Buffer with data to write to NAND
-  \param[in]   len       Number of bytes to write (buffer length)
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_SendCommand (uint32_t dev_num, uint8_t cmd)
+  \brief         Send command to NAND device.
+  \param[in]     dev_num  Device number
+  \param[in]     cmd      Command
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_CopyPage (uint32_t dev_num,
-                                                  uint32_t row_src,
-                                                  uint32_t row_dst,
-                                                  uint32_t row_cnt)
-  \brief       Copy pages within NAND device.
-  \param[in]   dev_num   Device number
-  \param[in]   row_src   Source row address
-  \param[in]   row_dst   Destination row address
-  \param[in]   row_cnt   Number of pages (rows) to copy
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_SendAddress (uint32_t dev_num, uint8_t addr)
+  \brief         Send address to NAND device.
+  \param[in]     dev_num  Device number
+  \param[in]     addr     Address
+  \return        \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_EraseBlock (uint32_t  dev_num,
-                                                    uint32_t  row)
-  \brief       Erase blocks in NAND device.
-  \param[in]   dev_num   Device number
-  \param[in]   row       Block start row address
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_ReadData (uint32_t dev_num, void *data, uint32_t cnt, uint32_t mode)
+  \brief         Read data from NAND device.
+  \param[in]     dev_num  Device number
+  \param[out]    data     Pointer to buffer for data to read from NAND device
+  \param[in]     cnt      Number of data items to read
+  \param[in]     mode     Operation mode
+  \return        number of data items read or \ref execution_status
 */
 /**
-  \fn          ARM_NAND_STATUS ARM_NAND_ReadStatus (uint32_t dev_num, uint8_t *stat)
-  \brief       Read NAND device status.
-  \param[in]   dev_num   Device number
-  \param[out]  stat      Pointer to store status read from NAND
-  \return      execution status \ref ARM_NAND_STATUS
+  \fn            int32_t ARM_NAND_WriteData (uint32_t dev_num, const void *data, uint32_t cnt, uint32_t mode)
+  \brief         Write data to NAND device.
+  \param[in]     dev_num  Device number
+  \param[out]    data     Pointer to buffer with data to write to NAND device
+  \param[in]     cnt      Number of data items to write
+  \param[in]     mode     Operation mode
+  \return        number of data items written or \ref execution_status
+*/
+/**
+  \fn            int32_t ARM_NAND_ExecuteSequence (uint32_t dev_num, uint32_t code, uint32_t cmd,
+                                                   uint32_t addr_col, uint32_t addr_row,
+                                                   void *data, uint32_t data_cnt,
+                                                   uint8_t *status, uint32_t *count)
+  \brief         Execute sequence of operations.
+  \param[in]     dev_num  Device number
+  \param[in]     code     Sequence code
+  \param[in]     cmd      Command(s)
+  \param[in]     addr_col Column address
+  \param[in]     addr_row Row address
+  \param[in,out] data     Pointer to data to be written or read 
+  \param[in]     data_cnt Number of data items in one iteration
+  \param[out]    status   Pointer to status read
+  \param[in,out] count    Number of iterations
+  \return        \ref execution_status
+*/
+/**
+  \fn            int32_t ARM_NAND_AbortSequence (uint32_t dev_num)
+  \brief         Abort sequence execution.
+  \param[in]     dev_num  Device number
+  \return        \ref execution_status
+*/
+/**
+  \fn            int32_t ARM_NAND_Control (uint32_t dev_num, uint32_t control, uint32_t arg)
+  \brief         Control NAND Interface.
+  \param[in]     dev_num  Device number
+  \param[in]     control  Operation
+  \param[in]     arg      Argument of operation
+  \return        \ref execution_status
+*/
+/**
+  \fn            ARM_NAND_STATUS ARM_NAND_GetStatus (uint32_t dev_num)
+  \brief         Get NAND status.
+  \param[in]     dev_num  Device number
+  \return        NAND status \ref ARM_NAND_STATUS
+*/
+/**
+  \fn            int32_t ARM_NAND_InquireECC (int32_t index, ARM_NAND_ECC_INFO *info)
+  \brief         Inquire about available ECC.
+  \param[in]     index   Device number
+  \param[out]    info    Pointer to ECC information \ref ARM_NAND_ECC_INFO retrieved
+  \return        \ref execution_status
 */
 
 /**
-  \fn          void ARM_NAND_SignalEvent (uint32_t dev_num)
-  \brief       Signal NAND event. Callback function.
-  \param[in]   dev_num   Device number
-               Occurs when Program/Erase (WritePage, CopyPage, EraseBlock) completes.
-  \return      none
+  \fn            void ARM_NAND_SignalEvent (uint32_t dev_num, uint32_t event)
+  \brief         Signal NAND event.
+  \param[in]     dev_num  Device number
+  \param[in]     event    Event notification mask
+  \return        none
 */
 
-typedef void (*ARM_NAND_SignalEvent_t) (uint32_t dev_num);    ///< Pointer to \ref ARM_NAND_SignalEvent : Signal NAND Event.
+typedef void (*ARM_NAND_SignalEvent_t) (uint32_t dev_num, uint32_t event);    ///< Pointer to \ref ARM_NAND_SignalEvent : Signal NAND Event.
 
 
 /**
 \brief NAND Driver Capabilities.
 */
 typedef struct _ARM_NAND_CAPABILITIES {
-  uint32_t events   :  1;               ///< Signals events
-  uint32_t raw_nand :  1;               ///< Supports NAND Interface
-  uint32_t one_nand :  1;               ///< Supports OneNAND Interface
-  uint32_t ecc_slc  :  1;               ///< Supports ECC for SLC NAND
-  uint32_t ecc_mlc  :  1;               ///< Supports ECC for MLC NAND
-  uint32_t reserved : 27;               ///< reserved for future extension
+  uint32_t event_device_ready  : 1;     ///< Signal Device Ready event (R/Bn rising edge)
+  uint32_t reentrant_operation : 1;     ///< Supports re-entrant operation (SendCommand/Address, Read/WriteData)
+  uint32_t sequence_operation  : 1;     ///< Supports Sequence operation (ExecuteSequence, AbortSequence)
+  uint32_t vcc                 : 1;     ///< Supports VCC Power Supply Control
+  uint32_t vcc_1v8             : 1;     ///< Supports 1.8 VCC Power Supply
+  uint32_t vccq                : 1;     ///< Supports VCCQ I/O Power Supply Control
+  uint32_t vccq_1v8            : 1;     ///< Supports 1.8 VCCQ I/O Power Supply
+  uint32_t vpp                 : 1;     ///< Supports VPP High Voltage Power Supply Control
+  uint32_t wp                  : 1;     ///< Supports WPn (Write Protect) Control
+  uint32_t ce_lines            : 4;     ///< Number of CEn (Chip Enable) lines: ce_lines + 1
+  uint32_t ce_manual           : 1;     ///< Supports manual CEn (Chip Enable) Control
+  uint32_t rb_monitor          : 1;     ///< Supports R/Bn (Ready/Busy) Monitoring
+  uint32_t data_width_16       : 1;     ///< Supports 16-bit data
+  uint32_t ddr                 : 1;     ///< Supports NV-DDR  Data Interface (ONFI)
+  uint32_t ddr2                : 1;     ///< Supports NV-DDR2 Data Interface (ONFI)
+  uint32_t sdr_timing_mode     : 3;     ///< Fastest (highest) SDR     Timing Mode supported (ONFI)
+  uint32_t ddr_timing_mode     : 3;     ///< Fastest (highest) NV_DDR  Timing Mode supported (ONFI)
+  uint32_t ddr2_timing_mode    : 3;     ///< Fastest (highest) NV_DDR2 Timing Mode supported (ONFI)
+  uint32_t driver_strength_18  : 1;     ///< Supports Driver Strength 2.0x = 18 Ohms
+  uint32_t driver_strength_25  : 1;     ///< Supports Driver Strength 1.4x = 25 Ohms
+  uint32_t driver_strength_50  : 1;     ///< Supports Driver Strength 0.7x = 50 Ohms
 } ARM_NAND_CAPABILITIES;
 
 
@@ -295,19 +377,27 @@ typedef struct _ARM_NAND_CAPABILITIES {
 \brief Access structure of the NAND Driver.
 */
 typedef struct _ARM_DRIVER_NAND {
-  ARM_DRIVER_VERSION    (*GetVersion)     (void);                                                                               ///< Pointer to \ref ARM_NAND_GetVersion : Get driver version.
-  ARM_NAND_CAPABILITIES (*GetCapabilities)(void);                                                                               ///< Pointer to \ref ARM_NAND_GetCapabilities : Get driver capabilities.
-  ARM_NAND_STATUS       (*Initialize)     (ARM_NAND_SignalEvent_t cb_event, ARM_NAND_DEVICE *ptr_device, uint32_t num_devices); ///< Pointer to \ref ARM_NAND_Initialize : Initialize NAND Interface.
-  ARM_NAND_STATUS       (*Uninitialize)   (void);                                                                               ///< Pointer to \ref ARM_NAND_Uninitialize : De-initialize NAND Interface.
-  ARM_NAND_STATUS       (*PowerControl)   (ARM_POWER_STATE state);                                                              ///< Pointer to \ref ARM_NAND_PowerControl : Control NAND Interface Power.
-  ARM_NAND_STATUS       (*ResetDevice)    (uint32_t dev_num);                                                                   ///< Pointer to \ref ARM_NAND_ResetDevice : Reset NAND Device.
-  ARM_NAND_STATUS       (*ReadID)         (uint32_t dev_num, uint8_t addr, uint8_t *buf, uint32_t len);                         ///< Pointer to \ref ARM_NAND_ReadID : Read Device ID from NAND.
-  ARM_NAND_STATUS       (*ReadParamPage)  (uint32_t dev_num, uint32_t col, uint8_t *buf, uint32_t len);                         ///< Pointer to \ref ARM_NAND_ReadParamPage : Read parameter page from NAND.
-  ARM_NAND_STATUS       (*ReadPage)       (uint32_t dev_num, uint32_t row, uint32_t col, uint8_t *buf, uint32_t len);           ///< Pointer to \ref ARM_NAND_ReadPage : Read data from NAND Page.
-  ARM_NAND_STATUS       (*WritePage)      (uint32_t dev_num, uint32_t row, uint32_t col, const uint8_t *buf, uint32_t len);     ///< Pointer to \ref ARM_NAND_WritePage : Write data to NAND Page.
-  ARM_NAND_STATUS       (*CopyPage)       (uint32_t dev_num, uint32_t row_src, uint32_t row_dst, uint32_t row_cnt);             ///< Pointer to \ref ARM_NAND_CopyPage : Copy pages in NAND Device.
-  ARM_NAND_STATUS       (*EraseBlock)     (uint32_t dev_num, uint32_t row);                                                     ///< Pointer to \ref ARM_NAND_EraseBlock : Erase block in NAND Device.
-  ARM_NAND_STATUS       (*ReadStatus)     (uint32_t dev_num, uint8_t *stat);                                                    ///< Pointer to \ref ARM_NAND_ReadStatus : Read Device status from NAND.
+  ARM_DRIVER_VERSION    (*GetVersion)     (void);                                                             ///< Pointer to \ref ARM_NAND_GetVersion : Get driver version.
+  ARM_NAND_CAPABILITIES (*GetCapabilities)(void);                                                             ///< Pointer to \ref ARM_NAND_GetCapabilities : Get driver capabilities.
+  int32_t               (*Initialize)     (ARM_NAND_SignalEvent_t cb_event);                                  ///< Pointer to \ref ARM_NAND_Initialize : Initialize NAND Interface.
+  int32_t               (*Uninitialize)   (void);                                                             ///< Pointer to \ref ARM_NAND_Uninitialize : De-initialize NAND Interface.
+  int32_t               (*PowerControl)   (ARM_POWER_STATE state);                                            ///< Pointer to \ref ARM_NAND_PowerControl : Control NAND Interface Power.
+  int32_t               (*DevicePower)    (uint32_t voltage);                                                 ///< Pointer to \ref ARM_NAND_DevicePower : Set device power supply voltage.
+  int32_t               (*WriteProtect)   (uint32_t dev_num, bool enable);                                    ///< Pointer to \ref ARM_NAND_WriteProtect : Control WPn (Write Protect).
+  int32_t               (*ChipEnable)     (uint32_t dev_num, bool enable);                                    ///< Pointer to \ref ARM_NAND_ChipEnable : Control CEn (Chip Enable).
+  int32_t               (*GetDeviceBusy)  (uint32_t dev_num);                                                 ///< Pointer to \ref ARM_NAND_GetDeviceBusy : Get Device Busy pin state.
+  int32_t               (*SendCommand)    (uint32_t dev_num, uint8_t cmd);                                    ///< Pointer to \ref ARM_NAND_SendCommand : Send command to NAND device.
+  int32_t               (*SendAddress)    (uint32_t dev_num, uint8_t addr);                                   ///< Pointer to \ref ARM_NAND_SendAddress : Send address to NAND device.
+  int32_t               (*ReadData)       (uint32_t dev_num,       void *data, uint32_t cnt, uint32_t mode);  ///< Pointer to \ref ARM_NAND_ReadData : Read data from NAND device.
+  int32_t               (*WriteData)      (uint32_t dev_num, const void *data, uint32_t cnt, uint32_t mode);  ///< Pointer to \ref ARM_NAND_WriteData : Write data to NAND device.
+  int32_t               (*ExecuteSequence)(uint32_t dev_num, uint32_t code, uint32_t cmd,
+                                           uint32_t addr_col, uint32_t addr_row,
+                                           void *data, uint32_t data_cnt,
+                                           uint8_t *status, uint32_t *count);                                 ///< Pointer to \ref ARM_NAND_ExecuteSequence : Execute sequence of operations.
+  int32_t               (*AbortSequence)  (uint32_t dev_num);                                                 ///< Pointer to \ref ARM_NAND_AbortSequence : Abort sequence execution. 
+  int32_t               (*Control)        (uint32_t dev_num, uint32_t control, uint32_t arg);                 ///< Pointer to \ref ARM_NAND_Control : Control NAND Interface.
+  ARM_NAND_STATUS       (*GetStatus)      (uint32_t dev_num);                                                 ///< Pointer to \ref ARM_NAND_GetStatus : Get NAND status.
+  int32_t               (*InquireECC)     ( int32_t index, ARM_NAND_ECC_INFO *info);                          ///< Pointer to \ref ARM_NAND_InquireECC : Inquire about available ECC. 
 } const ARM_DRIVER_NAND;
 
 #endif /* __DRIVER_NAND_H */

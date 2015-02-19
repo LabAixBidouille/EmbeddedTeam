@@ -18,7 +18,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
+ * $Date:        7. Mar 2014
  * $Revision:    V2.00
  *
  * Project:      Ethernet PHY (Physical Transceiver) Driver definitions
@@ -33,14 +33,14 @@
  *    Namespace prefix ARM_ added
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_ETH_PHY_H
 #define __DRIVER_ETH_PHY_H
 
 #include "Driver_ETH.h"
 
-#define ARM_ETH_PHY_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* API version */
+#define ARM_ETH_PHY_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,00)  /* API version */
 
 
 #define _ARM_Driver_ETH_PHY_(n)      Driver_ETH_PHY##n
@@ -49,14 +49,14 @@
 
 /****** Ethernet PHY Mode *****/
 #define ARM_ETH_PHY_SPEED_Pos            0
-#define ARM_ETH_PHY_SPEED_Msk           (3UL                 << ARM_ETH_MAC_SPEED_Pos)
-#define ARM_ETH_PHY_SPEED_10M           (ARM_ETH_SPEED_10M   << ARM_ETH_MAC_SPEED_Pos)  ///< 10 Mbps link speed
-#define ARM_ETH_PHY_SPEED_100M          (ARM_ETH_SPEED_100M  << ARM_ETH_MAC_SPEED_Pos)  ///< 100 Mbps link speed
-#define ARM_ETH_PHY_SPEED_1G            (ARM_ETH_SPEED_1G    << ARM_ETH_MAC_SPEED_Pos)  ///< 1 Gpbs link speed
+#define ARM_ETH_PHY_SPEED_Msk           (3UL                 << ARM_ETH_PHY_SPEED_Pos)
+#define ARM_ETH_PHY_SPEED_10M           (ARM_ETH_SPEED_10M   << ARM_ETH_PHY_SPEED_Pos)  ///< 10 Mbps link speed
+#define ARM_ETH_PHY_SPEED_100M          (ARM_ETH_SPEED_100M  << ARM_ETH_PHY_SPEED_Pos)  ///< 100 Mbps link speed
+#define ARM_ETH_PHY_SPEED_1G            (ARM_ETH_SPEED_1G    << ARM_ETH_PHY_SPEED_Pos)  ///< 1 Gpbs link speed
 #define ARM_ETH_PHY_DUPLEX_Pos           2
-#define ARM_ETH_PHY_DUPLEX_Msk          (1UL                 << ARM_ETH_MAC_DUPLEX_Pos)
-#define ARM_ETH_PHY_DUPLEX_HALF         (ARM_ETH_DUPLEX_HALF << ARM_ETH_MAC_DUPLEX_Pos) ///< Half duplex link
-#define ARM_ETH_PHY_DUPLEX_FULL         (ARM_ETH_DUPLEX_FULL << ARM_ETH_MAC_DUPLEX_Pos) ///< Full duplex link
+#define ARM_ETH_PHY_DUPLEX_Msk          (1UL                 << ARM_ETH_PHY_DUPLEX_Pos)
+#define ARM_ETH_PHY_DUPLEX_HALF         (ARM_ETH_DUPLEX_HALF << ARM_ETH_PHY_DUPLEX_Pos) ///< Half duplex link
+#define ARM_ETH_PHY_DUPLEX_FULL         (ARM_ETH_DUPLEX_FULL << ARM_ETH_PHY_DUPLEX_Pos) ///< Full duplex link
 #define ARM_ETH_PHY_AUTO_NEGOTIATE      (1UL << 3)                                      ///< Auto Negotiation mode
 #define ARM_ETH_PHY_LOOPBACK            (1UL << 4)                                      ///< Loop-back test mode
 #define ARM_ETH_PHY_ISOLATE             (1UL << 5)                                      ///< Isolate PHY from MII interface
@@ -124,7 +124,7 @@ typedef struct _ARM_DRIVER_ETH_PHY {
                                       ARM_ETH_PHY_Write_t fn_write);  ///< Pointer to \ref ARM_ETH_PHY_Initialize : Initialize PHY Device.
   int32_t            (*Uninitialize) (void);                          ///< Pointer to \ref ARM_ETH_PHY_Uninitialize : De-initialize PHY Device.
   int32_t            (*PowerControl) (ARM_POWER_STATE state);         ///< Pointer to \ref ARM_ETH_PHY_PowerControl : Control PHY Device Power.
-  int32_t            (*SetInterface) (uint32_t interface);             ///< Pointer to \ref ARM_ETH_PHY_SetInterface : Set Ethernet Media Interface.
+  int32_t            (*SetInterface) (uint32_t interface);            ///< Pointer to \ref ARM_ETH_PHY_SetInterface : Set Ethernet Media Interface.
   int32_t            (*SetMode)      (uint32_t mode);                 ///< Pointer to \ref ARM_ETH_PHY_SetMode : Set Ethernet PHY Device Operation mode.
   ARM_ETH_LINK_STATE (*GetLinkState) (void);                          ///< Pointer to \ref ARM_ETH_PHY_GetLinkState : Get Ethernet PHY Device Link state.
   ARM_ETH_LINK_INFO  (*GetLinkInfo)  (void);                          ///< Pointer to \ref ARM_ETH_PHY_GetLinkInfo : Get Ethernet PHY Device Link information.

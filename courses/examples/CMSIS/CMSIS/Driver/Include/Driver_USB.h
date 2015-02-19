@@ -18,7 +18,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
+ * $Date:        20. May 2014
  * $Revision:    V2.00
  *
  * Project:      USB Driver common definitions
@@ -32,7 +32,7 @@
  *    Added PID Types
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_USB_H
 #define __DRIVER_USB_H
@@ -49,12 +49,12 @@
 #define ARM_USB_PIN_DM                  (1 << 1) ///< USB D- pin
 #define ARM_USB_PIN_VBUS                (1 << 2) ///< USB VBUS pin
 #define ARM_USB_PIN_OC                  (1 << 3) ///< USB OverCurrent pin
-#define ARM_USB_PIN_ID                  (1 << 4) ///< USB ID pin            
+#define ARM_USB_PIN_ID                  (1 << 4) ///< USB ID pin
 
 /* USB Speed */
-#define ARM_USB_SPEED_LOW                0
-#define ARM_USB_SPEED_FULL               1
-#define ARM_USB_SPEED_HIGH               2
+#define ARM_USB_SPEED_LOW                0       ///< Low-speed USB
+#define ARM_USB_SPEED_FULL               1       ///< Full-speed USB
+#define ARM_USB_SPEED_HIGH               2       ///< High-speed USB
 
 /* USB PID Types */
 #define ARM_USB_PID_OUT                  1
@@ -80,10 +80,10 @@
 #define ARM_USB_ENDPOINT_DIRECTION_MASK  0x80
 
 /* USB Endpoint Type */
-#define ARM_USB_ENDPOINT_CONTROL         0
-#define ARM_USB_ENDPOINT_ISOCHRONOUS     1
-#define ARM_USB_ENDPOINT_BULK            2
-#define ARM_USB_ENDPOINT_INTERRUPT       3
+#define ARM_USB_ENDPOINT_CONTROL         0       ///< Control Endpoint
+#define ARM_USB_ENDPOINT_ISOCHRONOUS     1       ///< Isochronous Endpoint
+#define ARM_USB_ENDPOINT_BULK            2       ///< Bulk Endpoint
+#define ARM_USB_ENDPOINT_INTERRUPT       3       ///< Interrupt Endpoint
 
 /* USB Endpoint Maximum Packet Size (wMaxPacketSize) */
 #define ARM_USB_ENDPOINT_MAX_PACKET_SIZE_MASK           0x07FF

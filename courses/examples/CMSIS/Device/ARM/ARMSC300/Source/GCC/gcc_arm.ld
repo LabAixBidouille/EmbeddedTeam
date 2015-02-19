@@ -37,6 +37,8 @@ GROUP(libgcc.a libc.a libm.a libnosys.a)
  *   __StackLimit
  *   __StackTop
  *   __stack
+ *   __Vectors_End
+ *   __Vectors_Size
  */
 ENTRY(Reset_Handler)
 
@@ -44,7 +46,11 @@ SECTIONS
 {
 	.text :
 	{
-		KEEP(*(.isr_vector))
+		KEEP(*(.vectors))
+		__Vectors_End = .;
+		__Vectors_Size = __Vectors_End - __Vectors;
+		__end__ = .;
+
 		*(.text*)
 
 		KEEP(*(.init))
@@ -163,9 +169,10 @@ SECTIONS
 
 	.heap (COPY):
 	{
+		__HeapBase = .;
 		__end__ = .;
 		end = __end__;
-		*(.heap*)
+		KEEP(*(.heap*))
 		__HeapLimit = .;
 	} > RAM
 
@@ -174,7 +181,7 @@ SECTIONS
 	 * values to stack symbols later */
 	.stack_dummy (COPY):
 	{
-		*(.stack*)
+		KEEP(*(.stack*))
 	} > RAM
 
 	/* Set stack top to end of RAM, and stack limit move down by

@@ -18,13 +18,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
- * $Revision:    V2.00
+ * $Date:        30. May 2014
+ * $Revision:    V2.01
  *
  * Project:      Ethernet MAC (Media Access Control) Driver definitions
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.01
+ *    Added ARM_ETH_MAC_SLEEP Control
  *  Version 2.00
  *    Changed MAC Address handling:
  *      moved from ARM_ETH_MAC_Initialize
@@ -48,14 +50,14 @@
  *    Renamed capabilities items for checksum offload
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_ETH_MAC_H
 #define __DRIVER_ETH_MAC_H
 
 #include "Driver_ETH.h"
 
-#define ARM_ETH_MAC_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* API version */
+#define ARM_ETH_MAC_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,01)  /* API version */
 
 
 #define _ARM_Driver_ETH_MAC_(n)      Driver_ETH_MAC##n
@@ -65,10 +67,11 @@
 /****** Ethernet MAC Control Codes *****/
 
 #define ARM_ETH_MAC_CONFIGURE           (0x01)      ///< Configure MAC; arg = configuration
-#define ARM_ETH_MAC_CONTROL_TX          (0x02)      ///< Transmitter; arg = 0:disabled, 1:enabled
-#define ARM_ETH_MAC_CONTROL_RX          (0x03)      ///< Receiver; arg = 0:disabled, 1:enabled
+#define ARM_ETH_MAC_CONTROL_TX          (0x02)      ///< Transmitter; arg: 0=disabled, 1=enabled
+#define ARM_ETH_MAC_CONTROL_RX          (0x03)      ///< Receiver; arg: 0=disabled, 1=enabled
 #define ARM_ETH_MAC_FLUSH               (0x04)      ///< Flush buffer; arg = ARM_ETH_MAC_FLUSH_...
-#define ARM_ETH_MAC_VLAN_FILTER         (0x05)      ///< VLAN Filter for received frames; arg15..0: VLAN Tag; arg16: optional ARM_ETH_MAC_VLAN_FILTER_ID_ONLY
+#define ARM_ETH_MAC_SLEEP               (0x05)      ///< Sleep mode; arg: 1=enter and wait for Magic packet, 0=exit
+#define ARM_ETH_MAC_VLAN_FILTER         (0x06)      ///< VLAN Filter for received frames; arg15..0: VLAN Tag; arg16: optional ARM_ETH_MAC_VLAN_FILTER_ID_ONLY
 
 /*----- Ethernet MAC Configuration -----*/
 #define ARM_ETH_MAC_SPEED_Pos            0
@@ -97,7 +100,7 @@
 
 /****** Ethernet MAC Frame Transmit Flags *****/
 #define ARM_ETH_MAC_TX_FRAME_FRAGMENT   (1UL << 0)  ///< Indicate frame fragment
-#define ARM_ETH_MAC_TX_FRAME_EVENT      (1UL << 1)  ///< Generate event when frame transmitted
+#define ARM_ETH_MAC_TX_FRAME_EVENT      (1UL << 1)  ///< Generate event when frame is transmitted
 #define ARM_ETH_MAC_TX_FRAME_TIMESTAMP  (1UL << 2)  ///< Capture frame time stamp
 
 
@@ -161,21 +164,21 @@ typedef struct _ARM_ETH_MAC_TIME {
   \return      \ref execution_status
 */
 /**
-  \fn          int32_t ARM_ETH_MAC_SetMacAddress (ARM_ETH_MAC_ADDR *ptr_addr)
+  \fn          int32_t ARM_ETH_MAC_SetMacAddress (const ARM_ETH_MAC_ADDR *ptr_addr)
   \brief       Set Ethernet MAC Address.
   \param[in]   ptr_addr  Pointer to address
   \return      \ref execution_status
 */
 /**
-  \fn          int32_t ARM_ETH_MAC_SetAddressFilter (ARM_ETH_MAC_ADDR *ptr_addr,
-                                                     uint32_t          num_addr)
+  \fn          int32_t ARM_ETH_MAC_SetAddressFilter (const ARM_ETH_MAC_ADDR *ptr_addr,
+                                                           uint32_t          num_addr)
   \brief       Configure Address Filter.
   \param[in]   ptr_addr  Pointer to addresses
   \param[in]   num_addr  Number of addresses to configure
   \return      \ref execution_status
 */
 /**
-  \fn          int32_t ARM_ETH_MAC_SendFrame (uint8_t *frame, uint32_t len, uint32_t flags)
+  \fn          int32_t ARM_ETH_MAC_SendFrame (const uint8_t *frame, uint32_t len, uint32_t flags)
   \brief       Send Ethernet frame.
   \param[in]   frame  Pointer to frame buffer with data to send
   \param[in]   len    Frame buffer length in bytes
@@ -211,14 +214,14 @@ typedef struct _ARM_ETH_MAC_TIME {
 /**
   \fn          int32_t ARM_ETH_MAC_Control (uint32_t control, uint32_t arg)
   \brief       Control Ethernet Interface.
-  \param[in]   control  operation
-  \param[in]   arg      argument of operation (optional)
+  \param[in]   control  Operation
+  \param[in]   arg      Argument of operation (optional)
   \return      \ref execution_status
 */
 /**
   \fn          int32_t ARM_ETH_MAC_ControlTimer (uint32_t control, ARM_ETH_MAC_TIME *time)
   \brief       Control Precision Timer.
-  \param[in]   control  operation
+  \param[in]   control  Operation
   \param[in]   time     Pointer to time structure
   \return      \ref execution_status
 */
@@ -281,11 +284,11 @@ typedef struct _ARM_DRIVER_ETH_MAC {
   int32_t                  (*Initialize)      (ARM_ETH_MAC_SignalEvent_t cb_event);                  ///< Pointer to \ref ARM_ETH_MAC_Initialize : Initialize Ethernet MAC Device.
   int32_t                  (*Uninitialize)    (void);                                                ///< Pointer to \ref ARM_ETH_MAC_Uninitialize : De-initialize Ethernet MAC Device.
   int32_t                  (*PowerControl)    (ARM_POWER_STATE state);                               ///< Pointer to \ref ARM_ETH_MAC_PowerControl : Control Ethernet MAC Device Power.
-  int32_t                  (*GetMacAddress)   (ARM_ETH_MAC_ADDR *ptr_addr);                          ///< Pointer to \ref ARM_ETH_MAC_GetMacAddress : Get Ethernet MAC Address.
-  int32_t                  (*SetMacAddress)   (ARM_ETH_MAC_ADDR *ptr_addr);                          ///< Pointer to \ref ARM_ETH_MAC_SetMacAddress : Set Ethernet MAC Address.
-  int32_t                  (*SetAddressFilter)(ARM_ETH_MAC_ADDR *ptr_addr, uint32_t num_addr);       ///< Pointer to \ref ARM_ETH_MAC_SetAddressFilter : Configure Address Filter.
-  int32_t                  (*SendFrame)       (uint8_t *frame, uint32_t len, uint32_t flags);        ///< Pointer to \ref ARM_ETH_MAC_SendFrame : Send Ethernet frame.
-  int32_t                  (*ReadFrame)       (uint8_t *frame, uint32_t len);                        ///< Pointer to \ref ARM_ETH_MAC_ReadFrame : Read data of received Ethernet frame.
+  int32_t                  (*GetMacAddress)   (      ARM_ETH_MAC_ADDR *ptr_addr);                    ///< Pointer to \ref ARM_ETH_MAC_GetMacAddress : Get Ethernet MAC Address.
+  int32_t                  (*SetMacAddress)   (const ARM_ETH_MAC_ADDR *ptr_addr);                    ///< Pointer to \ref ARM_ETH_MAC_SetMacAddress : Set Ethernet MAC Address.
+  int32_t                  (*SetAddressFilter)(const ARM_ETH_MAC_ADDR *ptr_addr, uint32_t num_addr); ///< Pointer to \ref ARM_ETH_MAC_SetAddressFilter : Configure Address Filter.
+  int32_t                  (*SendFrame)       (const uint8_t *frame, uint32_t len, uint32_t flags);  ///< Pointer to \ref ARM_ETH_MAC_SendFrame : Send Ethernet frame.
+  int32_t                  (*ReadFrame)       (      uint8_t *frame, uint32_t len);                  ///< Pointer to \ref ARM_ETH_MAC_ReadFrame : Read data of received Ethernet frame.
   uint32_t                 (*GetRxFrameSize)  (void);                                                ///< Pointer to \ref ARM_ETH_MAC_GetRxFrameSize : Get size of received Ethernet frame.
   int32_t                  (*GetRxFrameTime)  (ARM_ETH_MAC_TIME *time);                              ///< Pointer to \ref ARM_ETH_MAC_GetRxFrameTime : Get time of received Ethernet frame.
   int32_t                  (*GetTxFrameTime)  (ARM_ETH_MAC_TIME *time);                              ///< Pointer to \ref ARM_ETH_MAC_GetTxFrameTime : Get time of transmitted Ethernet frame.

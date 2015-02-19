@@ -1,11 +1,11 @@
 /* File: startup_ARMSC000.S
  * Purpose: startup file for SC000 devices. Should use with
  *   GCC for ARM Embedded Processors
- * Version: V2.0
- * Date: 16 August 2013
+ * Version: V2.01
+ * Date: 12 June 2014
  *
  */
-/* Copyright (c) 2011 - 2013 ARM LIMITED
+/* Copyright (c) 2011 - 2014 ARM LIMITED
 
    All rights reserved.
    Redistribution and use in source and binary forms, with or without
@@ -68,10 +68,10 @@ __HeapBase:
 __HeapLimit:
 	.size	__HeapLimit, . - __HeapLimit
 
-	.section .isr_vector
+	.section .vectors
 	.align 2
-	.globl	__isr_vector
-__isr_vector:
+	.globl	__Vectors
+__Vectors:
 	.long	__StackTop            /* Top of Stack */
 	.long	Reset_Handler         /* Reset Handler */
 	.long	NMI_Handler           /* NMI Handler */
@@ -123,7 +123,7 @@ __isr_vector:
 	.long	UART3_IRQHandler      /* 30: UART3    - CPU FPGA        */
 	.long	SPI_IRQHandler        /* 31: SPI Touchscreen - CPU FPGA */
 
-	.size	__isr_vector, . - __isr_vector
+	.size	__Vectors, . - __Vectors
 
 	.text
 	.thumb

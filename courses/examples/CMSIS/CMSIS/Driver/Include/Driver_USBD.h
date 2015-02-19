@@ -18,13 +18,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
- * $Revision:    V2.00
+ * $Date:        3. Jun 2014
+ * $Revision:    V2.01
  *
  * Project:      USB Device Driver definitions
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.01
+ *    Added ARM_USBD_ReadSetupPacket function
  *  Version 2.00
  *    Removed ARM_USBD_DeviceConfigure function
  *    Removed ARM_USBD_SET_ADDRESS_STAGE parameter from ARM_USBD_DeviceSetAddress function
@@ -38,23 +40,23 @@
  *    Namespace prefix ARM_ added
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_USBD_H
 #define __DRIVER_USBD_H
 
 #include "Driver_USB.h"
 
-#define ARM_USBD_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,0)  /* API version */
+#define ARM_USBD_API_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,01)  /* API version */
 
 
 /**
 \brief USB Device State
 */
 typedef struct _ARM_USBD_STATE {
-  uint32_t vbus       : 1;              ///< USB Device VBUS flag
-  uint32_t speed      : 2;              ///< USB Device speed setting 
-  uint32_t active     : 1;              ///< USB Device active flag
+  uint32_t vbus   : 1;                  ///< USB Device VBUS flag
+  uint32_t speed  : 2;                  ///< USB Device speed setting (ARM_USB_SPEED_xxx)
+  uint32_t active : 1;                  ///< USB Device active flag
 } ARM_USBD_STATE;
 
 
@@ -131,6 +133,12 @@ typedef struct _ARM_USBD_STATE {
   \return      \ref execution_status
 */
 /**
+  \fn          int32_t ARM_USBD_ReadSetupPacket (uint8_t *setup)
+  \brief       Read setup packet received over Control Endpoint.
+  \param[out]  setup  Pointer to buffer for setup packet
+  \return      \ref execution_status
+*/
+/**
   \fn          int32_t ARM_USBD_EndpointConfigure (uint8_t  ep_addr,
                                                    uint8_t  ep_type,
                                                    uint16_t ep_max_packet_size)
@@ -138,7 +146,7 @@ typedef struct _ARM_USBD_STATE {
   \param[in]   ep_addr  Endpoint Address
                 - ep_addr.0..3: Address
                 - ep_addr.7:    Direction
-  \param[in]   ep_type  Endpoint Type
+  \param[in]   ep_type  Endpoint Type (ARM_USB_ENDPOINT_xxx)
   \param[in]   ep_max_packet_size Endpoint Maximum Packet Size
   \return      \ref execution_status
 */
@@ -217,9 +225,9 @@ typedef void (*ARM_USBD_SignalEndpointEvent_t) (uint8_t ep_addr, uint32_t event)
 \brief USB Device Driver Capabilities.
 */
 typedef struct _ARM_USBD_CAPABILITIES {
-  uint32_t vbus_detection      :  1;    ///< VBUS detection
-  uint32_t event_vbus_on       :  1;    ///< Signal VBUS On event
-  uint32_t event_vbus_off      :  1;    ///< Signal VBUS Off event
+  uint32_t vbus_detection  : 1;         ///< VBUS detection
+  uint32_t event_vbus_on   : 1;         ///< Signal VBUS On event
+  uint32_t event_vbus_off  : 1;         ///< Signal VBUS Off event
 } ARM_USBD_CAPABILITIES;
 
 
@@ -238,6 +246,7 @@ typedef struct _ARM_DRIVER_USBD {
   ARM_USBD_STATE        (*DeviceGetState)            (void);                                              ///< Pointer to \ref ARM_USBD_DeviceGetState : Get current USB Device State.
   int32_t               (*DeviceRemoteWakeup)        (void);                                              ///< Pointer to \ref ARM_USBD_DeviceRemoteWakeup : Trigger USB Remote Wakeup.
   int32_t               (*DeviceSetAddress)          (uint8_t dev_addr);                                  ///< Pointer to \ref ARM_USBD_DeviceSetAddress : Set USB Device Address.
+  int32_t               (*ReadSetupPacket)           (uint8_t *setup);                                    ///< Pointer to \ref ARM_USBD_ReadSetupPacket : Read setup packet received over Control Endpoint.
   int32_t               (*EndpointConfigure)         (uint8_t ep_addr,
                                                       uint8_t ep_type,
                                                       uint16_t ep_max_packet_size);                       ///< Pointer to \ref ARM_USBD_EndpointConfigure : Configure USB Endpoint.

@@ -18,7 +18,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        2. Jan 2014
+ * $Date:        7. Mar 2014
  * $Revision:    V2.00
  *
  * Project:      Ethernet PHY and MAC Driver common definitions
@@ -32,7 +32,7 @@
  *    Namespace prefix ARM_ added
  *  Version 1.00
  *    Initial release
- */ 
+ */
 
 #ifndef __DRIVER_ETH_H
 #define __DRIVER_ETH_H

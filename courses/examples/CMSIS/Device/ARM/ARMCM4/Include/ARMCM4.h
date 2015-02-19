@@ -2,10 +2,10 @@
  * @file     ARMCM4.h
  * @brief    CMSIS Core Peripheral Access Layer Header File for
  *           ARMCM4 Device Series
- * @version  V2.00
- * @date     17. Februar 2014
+ * @version  V2.02
+ * @date     10. September 2014
  *
- * @note
+ * @note     configured for CM4 without FPU
  *
  ******************************************************************************/
 /* Copyright (c) 2011 - 2014 ARM LIMITED
@@ -95,9 +95,9 @@ typedef enum IRQn
 #define __MPU_PRESENT             1         /*!< MPU present or not                              */
 #define __NVIC_PRIO_BITS          3         /*!< Number of Bits used for Priority Levels         */
 #define __Vendor_SysTickConfig    0         /*!< Set to 1 if different SysTick Config is used    */
-#define __FPU_PRESENT             1         /*!< FPU present or not                              */
+#define __FPU_PRESENT             0         /*!< no FPU present                                  */
 
-#include <core_cm4.h>                       /* Processor and core peripherals                    */
+#include "core_cm4.h"                       /* Processor and core peripherals                    */
 #include "system_ARMCM4.h"                  /* System Header                                     */
 
 
@@ -106,19 +106,19 @@ typedef enum IRQn
 /* ================================================================================ */
 
 /* -------------------  Start of section using anonymous unions  ------------------ */
-#if defined(__CC_ARM)
+#if   defined (__CC_ARM)
   #pragma push
   #pragma anon_unions
-#elif defined(__ICCARM__)
+#elif defined (__ICCARM__)
   #pragma language=extended
-#elif defined(__GNUC__)
+#elif defined (__GNUC__)
   /* anonymous unions are enabled by default */
-#elif defined(__TMS470__)
-/* anonymous unions are enabled by default */
-#elif defined(__TASKING__)
+#elif defined (__TMS470__)
+  /* anonymous unions are enabled by default */
+#elif defined (__TASKING__)
   #pragma warning 586
-#elif defined ( __CSMC__ )		/* Cosmic */
-/* anonymous unions are enabled by default */
+#elif defined (__CSMC__)
+  /* anonymous unions are enabled by default */
 #else
   #warning Not supported compiler type
 #endif
@@ -212,18 +212,18 @@ typedef struct
 
 
 /* --------------------  End of section using anonymous unions  ------------------- */
-#if defined(__CC_ARM)
+#if   defined (__CC_ARM)
   #pragma pop
-#elif defined(__ICCARM__)
+#elif defined (__ICCARM__)
   /* leave anonymous unions enabled */
-#elif defined(__GNUC__)
+#elif defined (__GNUC__)
   /* anonymous unions are enabled by default */
-#elif defined(__TMS470__)
+#elif defined (__TMS470__)
   /* anonymous unions are enabled by default */
-#elif defined(__TASKING__)
+#elif defined (__TASKING__)
   #pragma warning restore
-#elif defined ( __CSMC__ )		/* Cosmic */
-/* anonymous unions are enabled by default */
+#elif defined (__CSMC__)
+  /* anonymous unions are enabled by default */
 #else
   #warning Not supported compiler type
 #endif

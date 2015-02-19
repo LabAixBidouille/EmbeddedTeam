@@ -489,7 +489,7 @@ int32_t osSignalSet (osThreadId thread_id, int32_t signals);
 /// Clear the specified Signal Flags of an active thread.
 /// \param[in]     thread_id     thread ID obtained by \ref osThreadCreate or \ref osThreadGetId.
 /// \param[in]     signals       specifies the signal flags of the thread that shall be cleared.
-/// \return previous signal flags of the specified thread or 0x80000000 in case of incorrect parameters.
+/// \return previous signal flags of the specified thread or 0x80000000 in case of incorrect parameters or call from ISR.
 /// \note MUST REMAIN UNCHANGED: \b osSignalClear shall be consistent in every CMSIS-RTOS.
 int32_t osSignalClear (osThreadId thread_id, int32_t signals);
 
