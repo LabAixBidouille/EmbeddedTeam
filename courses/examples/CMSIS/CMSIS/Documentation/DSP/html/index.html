@@ -130,16 +130,22 @@ $(document).ready(function(){initNavTree('index.html','');});
 <h2>Using the Library</h2>
 <p>The library installer contains prebuilt versions of the libraries in the <code>Lib</code> folder.</p>
 <ul>
+<li>arm_cortexM7lfdp_math.lib (Little endian and Double Precision Floating Point Unit on Cortex-M7)</li>
+<li>arm_cortexM7bfdp_math.lib (Big endian and Double Precision Floating Point Unit on Cortex-M7)</li>
+<li>arm_cortexM7lfsp_math.lib (Little endian and Single Precision Floating Point Unit on Cortex-M7)</li>
+<li>arm_cortexM7bfsp_math.lib (Big endian and Single Precision Floating Point Unit on Cortex-M7)</li>
+<li>arm_cortexM7l_math.lib (Little endian on Cortex-M7)</li>
+<li>arm_cortexM7b_math.lib (Big endian on Cortex-M7)</li>
 <li>arm_cortexM4lf_math.lib (Little endian and Floating Point Unit on Cortex-M4)</li>
 <li>arm_cortexM4bf_math.lib (Big endian and Floating Point Unit on Cortex-M4)</li>
 <li>arm_cortexM4l_math.lib (Little endian on Cortex-M4)</li>
 <li>arm_cortexM4b_math.lib (Big endian on Cortex-M4)</li>
 <li>arm_cortexM3l_math.lib (Little endian on Cortex-M3)</li>
 <li>arm_cortexM3b_math.lib (Big endian on Cortex-M3)</li>
-<li>arm_cortexM0l_math.lib (Little endian on Cortex-M0)</li>
-<li>arm_cortexM0b_math.lib (Big endian on Cortex-M3)</li>
+<li>arm_cortexM0l_math.lib (Little endian on Cortex-M0 / CortexM0+)</li>
+<li>arm_cortexM0b_math.lib (Big endian on Cortex-M0 / CortexM0+)</li>
 </ul>
-<p>The library functions are declared in the public file <code><a class="el" href="arm__math_8h.html">arm_math.h</a></code> which is placed in the <code>Include</code> folder. Simply include this file and link the appropriate library in the application and begin calling the library functions. The Library supports single public header file <code> <a class="el" href="arm__math_8h.html">arm_math.h</a></code> for Cortex-M4/M3/M0 with little endian and big endian. Same header file will be used for floating point unit(FPU) variants. Define the appropriate pre processor MACRO ARM_MATH_CM4 or ARM_MATH_CM3 or ARM_MATH_CM0 or ARM_MATH_CM0PLUS depending on the target processor in the application.</p>
+<p>The library functions are declared in the public file <code><a class="el" href="arm__math_8h.html">arm_math.h</a></code> which is placed in the <code>Include</code> folder. Simply include this file and link the appropriate library in the application and begin calling the library functions. The Library supports single public header file <code> <a class="el" href="arm__math_8h.html">arm_math.h</a></code> for Cortex-M7/M4/M3/M0/M0+ with little endian and big endian. Same header file will be used for floating point unit(FPU) variants. Define the appropriate pre processor MACRO ARM_MATH_CM7 or ARM_MATH_CM4 or ARM_MATH_CM3 or ARM_MATH_CM0 or ARM_MATH_CM0PLUS depending on the target processor in the application.</p>
 <h2>Examples</h2>
 <p>The library ships with a number of examples which demonstrate how to use the library functions.</p>
 <h2>Toolchain Support</h2>
@@ -201,7 +207,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 23 2014 18:52:44 for CMSIS-DSP by ARM Ltd. All rights reserved.
+    <li class="footer">Generated on Wed Sep 24 2014 12:16:23 for CMSIS-DSP by ARM Ltd. All rights reserved.
 	<!--
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.2 

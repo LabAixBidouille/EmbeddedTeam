@@ -2,7 +2,7 @@
 /*                  Atmel Microcontroller Software Support                      */
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
-/* Copyright (c) 2014, Atmel Corporation                                        */
+/* Copyright (c) 2015, Atmel Corporation                                        */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -41,7 +41,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif
+#endif 
 
 #if !(defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__))
 #include <stdint.h>
@@ -66,7 +66,7 @@ typedef enum IRQn
   PendSV_IRQn           = -2,  /**< 14 Cortex-M4 Pend SV Interrupt           */
   SysTick_IRQn          = -1,  /**< 15 Cortex-M4 System Tick Interrupt       */
 /******  SAM4S16C specific Interrupt Numbers *********************************/
-
+  
   SUPC_IRQn            =  0, /**<  0 SAM4S16C Supply Controller (SUPC) */
   RSTC_IRQn            =  1, /**<  1 SAM4S16C Reset Controller (RSTC) */
   RTC_IRQn             =  2, /**<  2 SAM4S16C Real Time Clock (RTC) */
@@ -106,7 +106,7 @@ typedef struct _DeviceVectors
 {
   /* Stack pointer */
   void* pvStack;
-
+  
   /* Cortex-M handlers */
   void* pfnReset_Handler;
   void* pfnNMI_Handler;
@@ -208,7 +208,7 @@ void USART1_Handler     ( void );
 void WDT_Handler        ( void );
 
 /**
- * \brief Configuration of the Cortex-M4 Processor and Core Peripherals
+ * \brief Configuration of the Cortex-M4 Processor and Core Peripherals 
  */
 
 #define __CM4_REV              0x0001 /**< SAM4S16C core revision number ([15:8] revision number, [7:0] patch number) */

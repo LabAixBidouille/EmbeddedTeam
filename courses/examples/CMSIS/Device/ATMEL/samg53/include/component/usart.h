@@ -2,7 +2,7 @@
 /*                  Atmel Microcontroller Software Support                      */
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
-/* Copyright (c) 2014, Atmel Corporation                                        */
+/* Copyright (c) 2015, Atmel Corporation                                        */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -81,8 +81,8 @@ typedef struct {
 #define US_CR_STTTO (0x1u << 11) /**< \brief (US_CR) Clear TIMEOUT Flag and Start Time-out After Next Character Received */
 #define US_CR_SENDA (0x1u << 12) /**< \brief (US_CR) Send Address */
 #define US_CR_RETTO (0x1u << 15) /**< \brief (US_CR) Start Time-out Immediately */
-#define US_CR_RTSEN (0x1u << 18) /**< \brief (US_CR) Request to Send Enable */
-#define US_CR_RTSDIS (0x1u << 19) /**< \brief (US_CR) Request to Send Disable */
+#define US_CR_RTSEN (0x1u << 18) /**< \brief (US_CR) Request to Send Pin Control */
+#define US_CR_RTSDIS (0x1u << 19) /**< \brief (US_CR) Request to Send Pin Control */
 #define US_CR_FCS (0x1u << 18) /**< \brief (US_CR) Force SPI Chip Select */
 #define US_CR_RCS (0x1u << 19) /**< \brief (US_CR) Release SPI Chip Select */
 /* -------- US_MR : (USART Offset: 0x0004) Mode Register -------- */
@@ -177,21 +177,21 @@ typedef struct {
 #define US_IMR_CTSIC (0x1u << 19) /**< \brief (US_IMR) Clear to Send Input Change Interrupt Mask */
 #define US_IMR_UNRE (0x1u << 10) /**< \brief (US_IMR) SPI Underrun Error Interrupt Mask */
 /* -------- US_CSR : (USART Offset: 0x0014) Channel Status Register -------- */
-#define US_CSR_RXRDY (0x1u << 0) /**< \brief (US_CSR) Receiver Ready (automatically set / reset) */
-#define US_CSR_TXRDY (0x1u << 1) /**< \brief (US_CSR) Transmitter Ready (automatically set / reset) */
-#define US_CSR_RXBRK (0x1u << 2) /**< \brief (US_CSR) Break Received/End of Break (cleared by US_CR.RSTSTA command) */
-#define US_CSR_ENDRX (0x1u << 3) /**< \brief (US_CSR) End of RX Buffer (automatically set / cleared) */
-#define US_CSR_ENDTX (0x1u << 4) /**< \brief (US_CSR) End of TX Buffer (automatically set / cleared) */
-#define US_CSR_OVRE (0x1u << 5) /**< \brief (US_CSR) Overrun Error (cleared by US_CR.RSTSTA command) */
-#define US_CSR_FRAME (0x1u << 6) /**< \brief (US_CSR) Framing Error (cleared by US_CR.RSTSTA command) */
-#define US_CSR_PARE (0x1u << 7) /**< \brief (US_CSR) Parity Error (cleared by US_CR.RSTSTA command) */
-#define US_CSR_TIMEOUT (0x1u << 8) /**< \brief (US_CSR) Receiver Time-out (cleared by US_CR.STTTO command) */
-#define US_CSR_TXEMPTY (0x1u << 9) /**< \brief (US_CSR) Transmitter Empty (automatically set / reset) */
-#define US_CSR_TXBUFE (0x1u << 11) /**< \brief (US_CSR) TX Buffer Empty (automatically set / cleared) */
-#define US_CSR_RXBUFF (0x1u << 12) /**< \brief (US_CSR) RX Buffer Full (automatically set / cleared) */
+#define US_CSR_RXRDY (0x1u << 0) /**< \brief (US_CSR) Receiver Ready (cleared by reading US_RHR) */
+#define US_CSR_TXRDY (0x1u << 1) /**< \brief (US_CSR) Transmitter Ready (cleared by writing US_THR) */
+#define US_CSR_RXBRK (0x1u << 2) /**< \brief (US_CSR) Break Received/End of Break (cleared by writing a one to bit US_CR.RSTSTA) */
+#define US_CSR_ENDRX (0x1u << 3) /**< \brief (US_CSR) End of RX Buffer (cleared by writing US_RCR or US_RNCR) */
+#define US_CSR_ENDTX (0x1u << 4) /**< \brief (US_CSR) End of TX Buffer (cleared by writing US_TCR or US_TNCR) */
+#define US_CSR_OVRE (0x1u << 5) /**< \brief (US_CSR) Overrun Error (cleared by writing a one to bit US_CR.RSTSTA) */
+#define US_CSR_FRAME (0x1u << 6) /**< \brief (US_CSR) Framing Error (cleared by writing a one to bit US_CR.RSTSTA) */
+#define US_CSR_PARE (0x1u << 7) /**< \brief (US_CSR) Parity Error (cleared by writing a one to bit US_CR.RSTSTA) */
+#define US_CSR_TIMEOUT (0x1u << 8) /**< \brief (US_CSR) Receiver Time-out (cleared by writing a one to bit US_CR.STTTO) */
+#define US_CSR_TXEMPTY (0x1u << 9) /**< \brief (US_CSR) Transmitter Empty (cleared by writing US_THR) */
+#define US_CSR_TXBUFE (0x1u << 11) /**< \brief (US_CSR) TX Buffer Empty (cleared by writing US_TCR or US_TNCR) */
+#define US_CSR_RXBUFF (0x1u << 12) /**< \brief (US_CSR) RX Buffer Full (cleared by writing US_RCR or US_RNCR) */
 #define US_CSR_CTSIC (0x1u << 19) /**< \brief (US_CSR) Clear to Send Input Change Flag (cleared on read) */
-#define US_CSR_CTS (0x1u << 23) /**< \brief (US_CSR) Image of CTS Input (automatically set / cleared) */
-#define US_CSR_UNRE (0x1u << 10) /**< \brief (US_CSR) Underrun Error */
+#define US_CSR_CTS (0x1u << 23) /**< \brief (US_CSR) Image of CTS Input */
+#define US_CSR_UNRE (0x1u << 10) /**< \brief (US_CSR) Underrun Error (cleared by writing a one to bit US_CR.RSTSTA) */
 /* -------- US_RHR : (USART Offset: 0x0018) Receive Holding Register -------- */
 #define US_RHR_RXCHR_Pos 0
 #define US_RHR_RXCHR_Msk (0x1ffu << US_RHR_RXCHR_Pos) /**< \brief (US_RHR) Received Character */
@@ -270,9 +270,9 @@ typedef struct {
 /* -------- US_PTSR : (USART Offset: 0x124) Transfer Status Register -------- */
 #define US_PTSR_RXTEN (0x1u << 0) /**< \brief (US_PTSR) Receiver Transfer Enable */
 #define US_PTSR_TXTEN (0x1u << 8) /**< \brief (US_PTSR) Transmitter Transfer Enable */
-#define US_PTSR_RXCBEN (0x1u << 16) /**< \brief (US_PTSR) Receiver Transfer Enable */
-#define US_PTSR_TXCBEN (0x1u << 18) /**< \brief (US_PTSR) Transmitter Transfer Enable */
-#define US_PTSR_ERR (0x1u << 24) /**< \brief (US_PTSR) Transfer Bus Error (clear on read) */
+#define US_PTSR_RXCBEN (0x1u << 16) /**< \brief (US_PTSR) Receiver Circular Buffer Enable */
+#define US_PTSR_TXCBEN (0x1u << 18) /**< \brief (US_PTSR) Transmitter Circular Buffer Enable */
+#define US_PTSR_ERR (0x1u << 24) /**< \brief (US_PTSR) Transfer Bus Error */
 
 /*@}*/
 

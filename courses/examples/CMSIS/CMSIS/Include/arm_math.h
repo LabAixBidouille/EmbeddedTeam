@@ -66,19 +66,25 @@
    * ------------
    *
    * The library installer contains prebuilt versions of the libraries in the <code>Lib</code> folder.
+   * - arm_cortexM7lfdp_math.lib (Little endian and Double Precision Floating Point Unit on Cortex-M7)
+   * - arm_cortexM7bfdp_math.lib (Big endian and Double Precision Floating Point Unit on Cortex-M7)
+   * - arm_cortexM7lfsp_math.lib (Little endian and Single Precision Floating Point Unit on Cortex-M7)
+   * - arm_cortexM7bfsp_math.lib (Big endian and Single Precision Floating Point Unit on Cortex-M7)
+   * - arm_cortexM7l_math.lib (Little endian on Cortex-M7)
+   * - arm_cortexM7b_math.lib (Big endian on Cortex-M7)
    * - arm_cortexM4lf_math.lib (Little endian and Floating Point Unit on Cortex-M4)
    * - arm_cortexM4bf_math.lib (Big endian and Floating Point Unit on Cortex-M4)
    * - arm_cortexM4l_math.lib (Little endian on Cortex-M4)
    * - arm_cortexM4b_math.lib (Big endian on Cortex-M4)
    * - arm_cortexM3l_math.lib (Little endian on Cortex-M3)
    * - arm_cortexM3b_math.lib (Big endian on Cortex-M3)
-   * - arm_cortexM0l_math.lib (Little endian on Cortex-M0)
-   * - arm_cortexM0b_math.lib (Big endian on Cortex-M3)
+   * - arm_cortexM0l_math.lib (Little endian on Cortex-M0 / CortexM0+)
+   * - arm_cortexM0b_math.lib (Big endian on Cortex-M0 / CortexM0+)
    *
    * The library functions are declared in the public file <code>arm_math.h</code> which is placed in the <code>Include</code> folder.
    * Simply include this file and link the appropriate library in the application and begin calling the library functions. The Library supports single
-   * public header file <code> arm_math.h</code> for Cortex-M4/M3/M0 with little endian and big endian. Same header file will be used for floating point unit(FPU) variants.
-   * Define the appropriate pre processor MACRO ARM_MATH_CM4 or  ARM_MATH_CM3 or
+   * public header file <code> arm_math.h</code> for Cortex-M7/M4/M3/M0/M0+ with little endian and big endian. Same header file will be used for floating point unit(FPU) variants.
+   * Define the appropriate pre processor MACRO ARM_MATH_CM7 or ARM_MATH_CM4 or  ARM_MATH_CM3 or
    * ARM_MATH_CM0 or ARM_MATH_CM0PLUS depending on the target processor in the application.
    *
    * Examples

@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------------
  *         SAM Software Package License
  * ----------------------------------------------------------------------------
- * Copyright (c) 2014, Atmel Corporation
+ * Copyright (c) 2015, Atmel Corporation
  *
  * All rights reserved.
  *
@@ -65,13 +65,15 @@
 #include "samd20/include/samd20.h"
 #elif defined (__SAMD20J18__)
 #include "samd20/include/samd20.h"
-#elif defined (__SAMD21E14A__)
-#include "samd21/include/samd21.h"
 #elif defined (__SAMD21E15A__)
+#include "samd21/include/samd21.h"
+#elif defined (__SAMD21E15B__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21E15L__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21E16A__)
+#include "samd21/include/samd21.h"
+#elif defined (__SAMD21E16B__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21E16L__)
 #include "samd21/include/samd21.h"
@@ -79,25 +81,29 @@
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21E18A__)
 #include "samd21/include/samd21.h"
-#elif defined (__SAMD21G14A__)
-#include "samd21/include/samd21.h"
 #elif defined (__SAMD21G15A__)
 #include "samd21/include/samd21.h"
+#elif defined (__SAMD21G15B__)
+#include "samd21/include/samd21.h"
 #elif defined (__SAMD21G16A__)
+#include "samd21/include/samd21.h"
+#elif defined (__SAMD21G16B__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21G17A__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21G18A__)
 #include "samd21/include/samd21.h"
-#elif defined (__SAMD21J14A__)
-#include "samd21/include/samd21.h"
 #elif defined (__SAMD21J15A__)
+#include "samd21/include/samd21.h"
+#elif defined (__SAMD21J15B__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21J16A__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21J17A__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD21J18A__)
+#include "samd21/include/samd21.h"
+#elif defined (__SAMD21J16B__)
 #include "samd21/include/samd21.h"
 #elif defined (__SAMD09C13A__)
 #include "samd09/include/samd09.h"
@@ -113,18 +119,48 @@
 #include "samd10/include/samd10.h"
 #elif defined (__SAMD10D14AM__)
 #include "samd10/include/samd10.h"
-#elif defined (__SAMD11C13A__)
-#include "samd11/include/samd11.h"
 #elif defined (__SAMD11C14A__)
-#include "samd11/include/samd11.h"
-#elif defined (__SAMD11D13AM__)
-#include "samd11/include/samd11.h"
-#elif defined (__SAMD11D13AS__)
 #include "samd11/include/samd11.h"
 #elif defined (__SAMD11D14AS__)
 #include "samd11/include/samd11.h"
 #elif defined (__SAMD11D14AM__)
 #include "samd11/include/samd11.h"
+#elif defined (__SAMDA0E14A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0E15A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0E16A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0G14A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0G15A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0G16A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0J14A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0J15A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA0J16A__)
+#include "samda0/include/samda0.h"
+#elif defined (__SAMDA1E14A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1E15A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1E16A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1G14A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1G15A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1G16A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1J14A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1J15A__)
+#include "samda1/include/samda1.h"
+#elif defined (__SAMDA1J16A__)
+#include "samda1/include/samda1.h"
 #endif
 
 #endif /* _SAMD_INCLUDED_ */

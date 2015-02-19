@@ -52,7 +52,7 @@
 #define REG_TCC2_SYNCBUSY          (0x42002808U) /**< \brief (TCC2) Synchronization Busy */
 #define REG_TCC2_FCTRLA            (0x4200280CU) /**< \brief (TCC2) Recoverable Fault A Configuration */
 #define REG_TCC2_FCTRLB            (0x42002810U) /**< \brief (TCC2) Recoverable Fault B Configuration */
-#define REG_TCC2_DRVCTRL           (0x42002818U) /**< \brief (TCC2) Driver Configuration */
+#define REG_TCC2_DRVCTRL           (0x42002818U) /**< \brief (TCC2) Driver Control */
 #define REG_TCC2_DBGCTRL           (0x4200281EU) /**< \brief (TCC2) Debug Control */
 #define REG_TCC2_EVCTRL            (0x42002820U) /**< \brief (TCC2) Event Control */
 #define REG_TCC2_INTENCLR          (0x42002824U) /**< \brief (TCC2) Interrupt Enable Clear */
@@ -75,7 +75,7 @@
 #define REG_TCC2_SYNCBUSY          (*(RoReg  *)0x42002808U) /**< \brief (TCC2) Synchronization Busy */
 #define REG_TCC2_FCTRLA            (*(RwReg  *)0x4200280CU) /**< \brief (TCC2) Recoverable Fault A Configuration */
 #define REG_TCC2_FCTRLB            (*(RwReg  *)0x42002810U) /**< \brief (TCC2) Recoverable Fault B Configuration */
-#define REG_TCC2_DRVCTRL           (*(RwReg  *)0x42002818U) /**< \brief (TCC2) Driver Configuration */
+#define REG_TCC2_DRVCTRL           (*(RwReg  *)0x42002818U) /**< \brief (TCC2) Driver Control */
 #define REG_TCC2_DBGCTRL           (*(RwReg8 *)0x4200281EU) /**< \brief (TCC2) Debug Control */
 #define REG_TCC2_EVCTRL            (*(RwReg  *)0x42002820U) /**< \brief (TCC2) Event Control */
 #define REG_TCC2_INTENCLR          (*(RwReg  *)0x42002824U) /**< \brief (TCC2) Interrupt Enable Clear */

@@ -53,7 +53,7 @@
 #define REG_TCC0_FCTRLA            (0x4200200CU) /**< \brief (TCC0) Recoverable Fault A Configuration */
 #define REG_TCC0_FCTRLB            (0x42002010U) /**< \brief (TCC0) Recoverable Fault B Configuration */
 #define REG_TCC0_WEXCTRL           (0x42002014U) /**< \brief (TCC0) Waveform Extension Configuration */
-#define REG_TCC0_DRVCTRL           (0x42002018U) /**< \brief (TCC0) Driver Configuration */
+#define REG_TCC0_DRVCTRL           (0x42002018U) /**< \brief (TCC0) Driver Control */
 #define REG_TCC0_DBGCTRL           (0x4200201EU) /**< \brief (TCC0) Debug Control */
 #define REG_TCC0_EVCTRL            (0x42002020U) /**< \brief (TCC0) Event Control */
 #define REG_TCC0_INTENCLR          (0x42002024U) /**< \brief (TCC0) Interrupt Enable Clear */
@@ -83,7 +83,7 @@
 #define REG_TCC0_FCTRLA            (*(RwReg  *)0x4200200CU) /**< \brief (TCC0) Recoverable Fault A Configuration */
 #define REG_TCC0_FCTRLB            (*(RwReg  *)0x42002010U) /**< \brief (TCC0) Recoverable Fault B Configuration */
 #define REG_TCC0_WEXCTRL           (*(RwReg  *)0x42002014U) /**< \brief (TCC0) Waveform Extension Configuration */
-#define REG_TCC0_DRVCTRL           (*(RwReg  *)0x42002018U) /**< \brief (TCC0) Driver Configuration */
+#define REG_TCC0_DRVCTRL           (*(RwReg  *)0x42002018U) /**< \brief (TCC0) Driver Control */
 #define REG_TCC0_DBGCTRL           (*(RwReg8 *)0x4200201EU) /**< \brief (TCC0) Debug Control */
 #define REG_TCC0_EVCTRL            (*(RwReg  *)0x42002020U) /**< \brief (TCC0) Event Control */
 #define REG_TCC0_INTENCLR          (*(RwReg  *)0x42002024U) /**< \brief (TCC0) Interrupt Enable Clear */

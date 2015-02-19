@@ -382,41 +382,41 @@ typedef struct {
 /*@{*/
 
 
-#define SCIF_FUSES_BOD18ACTION_ADDR HFLASHC_USER
-#define SCIF_FUSES_BOD18ACTION_Pos  18           /**< \brief (HFLASHC_USER) BOD18 Action */
-#define SCIF_FUSES_BOD18ACTION_Msk  (0x3u << SCIF_FUSES_BOD18ACTION_Pos)
-#define SCIF_FUSES_BOD18ACTION(value) ((SCIF_FUSES_BOD18ACTION_Msk & ((value) << SCIF_FUSES_BOD18ACTION_Pos)))
+#define FUSES_BOD18ACTION_ADDR      HFLASHC_USER
+#define FUSES_BOD18ACTION_Pos       18           /**< \brief (HFLASHC_USER) BOD18 Action */
+#define FUSES_BOD18ACTION_Msk       (0x3u << FUSES_BOD18ACTION_Pos)
+#define FUSES_BOD18ACTION(value)    ((FUSES_BOD18ACTION_Msk & ((value) << FUSES_BOD18ACTION_Pos)))
 
-#define SCIF_FUSES_BOD18EN_ADDR     HFLASHC_USER
-#define SCIF_FUSES_BOD18EN_Pos      17           /**< \brief (HFLASHC_USER) BOD18 Enable */
-#define SCIF_FUSES_BOD18EN_Msk      (0x1u << SCIF_FUSES_BOD18EN_Pos)
+#define FUSES_BOD18EN_ADDR          HFLASHC_USER
+#define FUSES_BOD18EN_Pos           17           /**< \brief (HFLASHC_USER) BOD18 Enable */
+#define FUSES_BOD18EN_Msk           (0x1u << FUSES_BOD18EN_Pos)
 
-#define SCIF_FUSES_BOD18HYST_ADDR   HFLASHC_USER
-#define SCIF_FUSES_BOD18HYST_Pos    20           /**< \brief (HFLASHC_USER) BOD18 Hysteresis */
-#define SCIF_FUSES_BOD18HYST_Msk    (0x1u << SCIF_FUSES_BOD18HYST_Pos)
+#define FUSES_BOD18HYST_ADDR        HFLASHC_USER
+#define FUSES_BOD18HYST_Pos         20           /**< \brief (HFLASHC_USER) BOD18 Hysteresis */
+#define FUSES_BOD18HYST_Msk         (0x1u << FUSES_BOD18HYST_Pos)
 
-#define SCIF_FUSES_BOD18LV_ADDR     HFLASHC_USER
-#define SCIF_FUSES_BOD18LV_Pos      11           /**< \brief (HFLASHC_USER) BOD18 Level */
-#define SCIF_FUSES_BOD18LV_Msk      (0x3Fu << SCIF_FUSES_BOD18LV_Pos)
-#define SCIF_FUSES_BOD18LV(value)   ((SCIF_FUSES_BOD18LV_Msk & ((value) << SCIF_FUSES_BOD18LV_Pos)))
+#define FUSES_BOD18LV_ADDR          HFLASHC_USER
+#define FUSES_BOD18LV_Pos           11           /**< \brief (HFLASHC_USER) BOD18 Level */
+#define FUSES_BOD18LV_Msk           (0x3Fu << FUSES_BOD18LV_Pos)
+#define FUSES_BOD18LV(value)        ((FUSES_BOD18LV_Msk & ((value) << FUSES_BOD18LV_Pos)))
 
-#define SCIF_FUSES_BOD33ACTION_ADDR HFLASHC_USER
-#define SCIF_FUSES_BOD33ACTION_Pos  8            /**< \brief (HFLASHC_USER) BOD33 Action */
-#define SCIF_FUSES_BOD33ACTION_Msk  (0x3u << SCIF_FUSES_BOD33ACTION_Pos)
-#define SCIF_FUSES_BOD33ACTION(value) ((SCIF_FUSES_BOD33ACTION_Msk & ((value) << SCIF_FUSES_BOD33ACTION_Pos)))
+#define FUSES_BOD33ACTION_ADDR      HFLASHC_USER
+#define FUSES_BOD33ACTION_Pos       8            /**< \brief (HFLASHC_USER) BOD33 Action */
+#define FUSES_BOD33ACTION_Msk       (0x3u << FUSES_BOD33ACTION_Pos)
+#define FUSES_BOD33ACTION(value)    ((FUSES_BOD33ACTION_Msk & ((value) << FUSES_BOD33ACTION_Pos)))
 
-#define SCIF_FUSES_BOD33EN_ADDR     HFLASHC_USER
-#define SCIF_FUSES_BOD33EN_Pos      7            /**< \brief (HFLASHC_USER) BOD33 Enable */
-#define SCIF_FUSES_BOD33EN_Msk      (0x1u << SCIF_FUSES_BOD33EN_Pos)
+#define FUSES_BOD33EN_ADDR          HFLASHC_USER
+#define FUSES_BOD33EN_Pos           7            /**< \brief (HFLASHC_USER) BOD33 Enable */
+#define FUSES_BOD33EN_Msk           (0x1u << FUSES_BOD33EN_Pos)
 
-#define SCIF_FUSES_BOD33LEVEL_ADDR  HFLASHC_USER
-#define SCIF_FUSES_BOD33LEVEL_Pos   1            /**< \brief (HFLASHC_USER) BOD33 Level */
-#define SCIF_FUSES_BOD33LEVEL_Msk   (0x3Fu << SCIF_FUSES_BOD33LEVEL_Pos)
-#define SCIF_FUSES_BOD33LEVEL(value) ((SCIF_FUSES_BOD33LEVEL_Msk & ((value) << SCIF_FUSES_BOD33LEVEL_Pos)))
+#define FUSES_BOD33LEVEL_ADDR       HFLASHC_USER
+#define FUSES_BOD33LEVEL_Pos        1            /**< \brief (HFLASHC_USER) BOD33 Level */
+#define FUSES_BOD33LEVEL_Msk        (0x3Fu << FUSES_BOD33LEVEL_Pos)
+#define FUSES_BOD33LEVEL(value)     ((FUSES_BOD33LEVEL_Msk & ((value) << FUSES_BOD33LEVEL_Pos)))
 
-#define SCIF_FUSES_BOD33_HYST_ADDR  HFLASHC_USER
-#define SCIF_FUSES_BOD33_HYST_Pos   10           /**< \brief (HFLASHC_USER) BOD33 Hysteresis */
-#define SCIF_FUSES_BOD33_HYST_Msk   (0x1u << SCIF_FUSES_BOD33_HYST_Pos)
+#define FUSES_BOD33_HYST_ADDR       HFLASHC_USER
+#define FUSES_BOD33_HYST_Pos        10           /**< \brief (HFLASHC_USER) BOD33 Hysteresis */
+#define FUSES_BOD33_HYST_Msk        (0x1u << FUSES_BOD33_HYST_Pos)
 
 #define WDT_FUSES_WDTAUTO_ADDR      HFLASHC_USER
 #define WDT_FUSES_WDTAUTO_Pos       0            /**< \brief (HFLASHC_USER) Watchdog Enabled at Reset */

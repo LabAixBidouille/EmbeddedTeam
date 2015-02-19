@@ -509,16 +509,16 @@ void TWIM3_Handler               ( void );
 // Peripheral instances on HTOP0 bridge
 #define ID_IISC           0 /**< \brief Inter-IC Sound (I2S) Controller (IISC) */
 #define ID_SPI            1 /**< \brief Serial Peripheral Interface (SPI) */
-#define ID_TC0            2 /**< \brief Timer/Counter TC (TC0) */
-#define ID_TC1            3 /**< \brief Timer/Counter TC (TC1) */
-#define ID_TWIM0          4 /**< \brief Two-wire Master Interface TWIM (TWIM0) */
-#define ID_TWIS0          5 /**< \brief Two-wire Slave Interface TWIS (TWIS0) */
-#define ID_TWIM1          6 /**< \brief Two-wire Master Interface TWIM (TWIM1) */
-#define ID_TWIS1          7 /**< \brief Two-wire Slave Interface TWIS (TWIS1) */
-#define ID_USART0         8 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter USART (USART0) */
-#define ID_USART1         9 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter USART (USART1) */
-#define ID_USART2        10 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter USART (USART2) */
-#define ID_USART3        11 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter USART (USART3) */
+#define ID_TC0            2 /**< \brief Timer/Counter 0 (TC0) */
+#define ID_TC1            3 /**< \brief Timer/Counter 1 (TC1) */
+#define ID_TWIM0          4 /**< \brief Two-wire Master Interface 0 (TWIM0) */
+#define ID_TWIS0          5 /**< \brief Two-wire Slave Interface 0 (TWIS0) */
+#define ID_TWIM1          6 /**< \brief Two-wire Master Interface 1 (TWIM1) */
+#define ID_TWIS1          7 /**< \brief Two-wire Slave Interface 1 (TWIS1) */
+#define ID_USART0         8 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter 0 (USART0) */
+#define ID_USART1         9 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter 1 (USART1) */
+#define ID_USART2        10 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter 2 (USART2) */
+#define ID_USART3        11 /**< \brief Universal Synchronous Asynchronous Receiver Transmitter 3 (USART3) */
 #define ID_ADCIFE        12 /**< \brief ADC controller interface (ADCIFE) */
 #define ID_DACC          13 /**< \brief DAC Controller (DACC) */
 #define ID_ACIFC         14 /**< \brief Analog Comparator Interface (ACIFC) */
@@ -527,8 +527,8 @@ void TWIM3_Handler               ( void );
 #define ID_TRNG          17 /**< \brief True Random Number Generator (TRNG) */
 #define ID_PARC          18 /**< \brief Parallel Capture (PARC) */
 #define ID_CATB          19 /**< \brief Capacitive Touch Module B (CATB) */
-#define ID_TWIM2         21 /**< \brief Two-wire Master Interface TWIM (TWIM2) */
-#define ID_TWIM3         22 /**< \brief Two-wire Master Interface TWIM (TWIM3) */
+#define ID_TWIM2         21 /**< \brief Two-wire Master Interface 2 (TWIM2) */
+#define ID_TWIM3         22 /**< \brief Two-wire Master Interface 3 (TWIM3) */
 
 // Peripheral instances on HTOP1 bridge
 #define ID_HFLASHC       32 /**< \brief Flash Controller (HFLASHC) */

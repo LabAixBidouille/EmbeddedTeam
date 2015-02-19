@@ -2,7 +2,7 @@
 /*                  Atmel Microcontroller Software Support                      */
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
-/* Copyright (c) 2014, Atmel Corporation                                        */
+/* Copyright (c) 2015, Atmel Corporation                                        */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -246,8 +246,8 @@ typedef struct {
 #define ADC_ISR_DRDY (0x1u << 24) /**< \brief (ADC_ISR) Data Ready (automatically set / cleared) */
 #define ADC_ISR_GOVRE (0x1u << 25) /**< \brief (ADC_ISR) General Overrun Error (cleared on read) */
 #define ADC_ISR_COMPE (0x1u << 26) /**< \brief (ADC_ISR) Comparison Event (cleared on read) */
-#define ADC_ISR_ENDRX (0x1u << 27) /**< \brief (ADC_ISR) End of Receiver Transfer (automatically set / cleared) */
-#define ADC_ISR_RXBUFF (0x1u << 28) /**< \brief (ADC_ISR) Reception Buffer Full (automatically set / cleared) */
+#define ADC_ISR_ENDRX (0x1u << 27) /**< \brief (ADC_ISR) End of Receive Transfer (cleared by writing ADC_RCR or ADC_RNCR) */
+#define ADC_ISR_RXBUFF (0x1u << 28) /**< \brief (ADC_ISR) Receive Buffer Full (cleared by writing ADC_RCR or ADC_RNCR) */
 /* -------- ADC_LCTMR : (ADC Offset: 0x34) Last Channel Trigger Mode Register -------- */
 #define ADC_LCTMR_DUALTRIG (0x1u << 0) /**< \brief (ADC_LCTMR) Dual Trigger ON */
 #define ADC_LCTMR_CMPMOD_Pos 4
@@ -349,9 +349,9 @@ typedef struct {
 /* -------- ADC_PTSR : (ADC Offset: 0x124) Transfer Status Register -------- */
 #define ADC_PTSR_RXTEN (0x1u << 0) /**< \brief (ADC_PTSR) Receiver Transfer Enable */
 #define ADC_PTSR_TXTEN (0x1u << 8) /**< \brief (ADC_PTSR) Transmitter Transfer Enable */
-#define ADC_PTSR_RXCBEN (0x1u << 16) /**< \brief (ADC_PTSR) Receiver Transfer Enable */
-#define ADC_PTSR_TXCBEN (0x1u << 18) /**< \brief (ADC_PTSR) Transmitter Transfer Enable */
-#define ADC_PTSR_ERR (0x1u << 24) /**< \brief (ADC_PTSR) Transfer Bus Error (clear on read) */
+#define ADC_PTSR_RXCBEN (0x1u << 16) /**< \brief (ADC_PTSR) Receiver Circular Buffer Enable */
+#define ADC_PTSR_TXCBEN (0x1u << 18) /**< \brief (ADC_PTSR) Transmitter Circular Buffer Enable */
+#define ADC_PTSR_ERR (0x1u << 24) /**< \brief (ADC_PTSR) Transfer Bus Error */
 
 /*@}*/
 

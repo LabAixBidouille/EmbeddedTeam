@@ -78,13 +78,13 @@ void RTC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler
 void EIC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void NVMCTRL_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void DMAC_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef USB_IRQn
+#ifdef ID_USB
 void USB_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 void EVSYS_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void SERCOM0_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void SERCOM1_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef SERCOM2_IRQn
+#ifdef ID_SERCOM2
 void SERCOM2_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 void TCC0_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -92,7 +92,7 @@ void TC1_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler
 void TC2_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void ADC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void AC_Handler              ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef DAC_IRQn
+#ifdef ID_DAC
 void DAC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 void PTC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -128,7 +128,7 @@ const DeviceVectors exception_table = {
         (void*) EIC_Handler,            /*  4 External Interrupt Controller */
         (void*) NVMCTRL_Handler,        /*  5 Non-Volatile Memory Controller */
         (void*) DMAC_Handler,           /*  6 Direct Memory Access Controller */
-#ifdef USB_IRQn
+#ifdef ID_USB
         (void*) USB_Handler,            /*  7 Universal Serial Bus */
 #else
         (void*) (0UL), /* Reserved */
@@ -136,7 +136,7 @@ const DeviceVectors exception_table = {
         (void*) EVSYS_Handler,          /*  8 Event System Interface */
         (void*) SERCOM0_Handler,        /*  9 Serial Communication Interface 0 */
         (void*) SERCOM1_Handler,        /* 10 Serial Communication Interface 1 */
-#ifdef SERCOM2_IRQn
+#ifdef ID_SERCOM2
         (void*) SERCOM2_Handler,        /* 11 Serial Communication Interface 2 */
 #else
         (void*) (0UL), /* Reserved */
@@ -146,7 +146,7 @@ const DeviceVectors exception_table = {
         (void*) TC2_Handler,            /* 14 Basic Timer Counter 1 */
         (void*) ADC_Handler,            /* 15 Analog Digital Converter */
         (void*) AC_Handler,             /* 16 Analog Comparators */
-#ifdef DAC_IRQn
+#ifdef ID_DAC
         (void*) DAC_Handler,            /* 17 Digital Analog Converter */
 #else
         (void*) (0UL), /* Reserved */

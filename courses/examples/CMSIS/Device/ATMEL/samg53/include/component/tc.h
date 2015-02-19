@@ -2,7 +2,7 @@
 /*                  Atmel Microcontroller Software Support                      */
 /*                       SAM Software Package License                           */
 /* ---------------------------------------------------------------------------- */
-/* Copyright (c) 2014, Atmel Corporation                                        */
+/* Copyright (c) 2015, Atmel Corporation                                        */
 /*                                                                              */
 /* All rights reserved.                                                         */
 /*                                                                              */
@@ -205,16 +205,16 @@ typedef struct {
 #define TC_RC_RC_Msk (0xffffffffu << TC_RC_RC_Pos) /**< \brief (TC_RC) Register C */
 #define TC_RC_RC(value) ((TC_RC_RC_Msk & ((value) << TC_RC_RC_Pos)))
 /* -------- TC_SR : (TC Offset: N/A) Status Register -------- */
-#define TC_SR_COVFS (0x1u << 0) /**< \brief (TC_SR) Counter Overflow Status */
-#define TC_SR_LOVRS (0x1u << 1) /**< \brief (TC_SR) Load Overrun Status */
-#define TC_SR_CPAS (0x1u << 2) /**< \brief (TC_SR) RA Compare Status */
-#define TC_SR_CPBS (0x1u << 3) /**< \brief (TC_SR) RB Compare Status */
-#define TC_SR_CPCS (0x1u << 4) /**< \brief (TC_SR) RC Compare Status */
-#define TC_SR_LDRAS (0x1u << 5) /**< \brief (TC_SR) RA Loading Status */
-#define TC_SR_LDRBS (0x1u << 6) /**< \brief (TC_SR) RB Loading Status */
-#define TC_SR_ETRGS (0x1u << 7) /**< \brief (TC_SR) External Trigger Status */
-#define TC_SR_ENDRX (0x1u << 8) /**< \brief (TC_SR) End of Receiver Transfer */
-#define TC_SR_RXBUFF (0x1u << 9) /**< \brief (TC_SR) Reception Buffer Full */
+#define TC_SR_COVFS (0x1u << 0) /**< \brief (TC_SR) Counter Overflow Status (cleared on read) */
+#define TC_SR_LOVRS (0x1u << 1) /**< \brief (TC_SR) Load Overrun Status (cleared on read) */
+#define TC_SR_CPAS (0x1u << 2) /**< \brief (TC_SR) RA Compare Status (cleared on read) */
+#define TC_SR_CPBS (0x1u << 3) /**< \brief (TC_SR) RB Compare Status (cleared on read) */
+#define TC_SR_CPCS (0x1u << 4) /**< \brief (TC_SR) RC Compare Status (cleared on read) */
+#define TC_SR_LDRAS (0x1u << 5) /**< \brief (TC_SR) RA Loading Status (cleared on read) */
+#define TC_SR_LDRBS (0x1u << 6) /**< \brief (TC_SR) RB Loading Status (cleared on read) */
+#define TC_SR_ETRGS (0x1u << 7) /**< \brief (TC_SR) External Trigger Status (cleared on read) */
+#define TC_SR_ENDRX (0x1u << 8) /**< \brief (TC_SR) End of Receiver Transfer (cleared by writing TC_RCR or TC_RNCR) */
+#define TC_SR_RXBUFF (0x1u << 9) /**< \brief (TC_SR) Reception Buffer Full (cleared by writing TC_RCR or TC_RNCR) */
 #define TC_SR_CLKSTA (0x1u << 16) /**< \brief (TC_SR) Clock Enabling Status */
 #define TC_SR_MTIOA (0x1u << 17) /**< \brief (TC_SR) TIOA Mirror */
 #define TC_SR_MTIOB (0x1u << 18) /**< \brief (TC_SR) TIOB Mirror */
@@ -303,9 +303,9 @@ typedef struct {
 /* -------- TC_PTSR0 : (TC Offset: 0x124) Transfer Status Register (pdc = 0) -------- */
 #define TC_PTSR0_RXTEN (0x1u << 0) /**< \brief (TC_PTSR0) Receiver Transfer Enable */
 #define TC_PTSR0_TXTEN (0x1u << 8) /**< \brief (TC_PTSR0) Transmitter Transfer Enable */
-#define TC_PTSR0_RXCBEN (0x1u << 16) /**< \brief (TC_PTSR0) Receiver Transfer Enable */
-#define TC_PTSR0_TXCBEN (0x1u << 18) /**< \brief (TC_PTSR0) Transmitter Transfer Enable */
-#define TC_PTSR0_ERR (0x1u << 24) /**< \brief (TC_PTSR0) Transfer Bus Error (clear on read) */
+#define TC_PTSR0_RXCBEN (0x1u << 16) /**< \brief (TC_PTSR0) Receiver Circular Buffer Enable */
+#define TC_PTSR0_TXCBEN (0x1u << 18) /**< \brief (TC_PTSR0) Transmitter Circular Buffer Enable */
+#define TC_PTSR0_ERR (0x1u << 24) /**< \brief (TC_PTSR0) Transfer Bus Error */
 
 /*@}*/
 

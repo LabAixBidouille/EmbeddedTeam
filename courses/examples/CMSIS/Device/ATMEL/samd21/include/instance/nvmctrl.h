@@ -84,11 +84,10 @@
 #define NVMCTRL_PSZ_BITS            6       
 #define NVMCTRL_ROW_PAGES           4       
 #define NVMCTRL_ROW_SIZE            256     
-#define NVMCTRL_RWWEE_PAGES         32       // Page size
-#define NVMCTRL_RWW_EEPROM_ADDR     0x00400000 // Start address of the RWW EEPROM area
-#define NVMCTRL_RWW_EEPROM_SIZE     2048     // Byte size of the RWW EEPROM area
 #define NVMCTRL_USER_PAGE_ADDRESS   0x00800000
 #define NVMCTRL_USER_PAGE_OFFSET    0x00800000
 #define NVMCTRL_USER_WORD_IMPLEMENTED_MASK 0xC01FFFFFFFFFFFFF
+#define NVMCTRL_RWWEE_PAGES         32       // Page size
+#define NVMCTRL_RWW_EEPROM_ADDR     0x00400000 // Start address of the RWW EEPROM area
 
 #endif /* _SAMD21_NVMCTRL_INSTANCE_ */

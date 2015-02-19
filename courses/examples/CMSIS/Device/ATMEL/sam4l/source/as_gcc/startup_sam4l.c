@@ -93,12 +93,12 @@ void PDCA_13_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler
 void PDCA_14_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void PDCA_15_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void CRCCU_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef USBC_IRQn
+#ifdef ID_USBC
 void USBC_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 void PEVC_TR_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void PEVC_OV_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef AESA_IRQn
+#ifdef ID_AESA
 void AESA_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 void PM_Handler              ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
@@ -158,7 +158,7 @@ void CATB_Handler            ( void ) __attribute__ ((weak, alias("Dummy_Handler
 void PTC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TWIM2_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TWIM3_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-#ifdef LCDCA_IRQn
+#ifdef ID_LCDCA
 void LCDCA_Handler           ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 #endif
 
@@ -204,14 +204,14 @@ const DeviceVectors exception_table = {
         (void*) PDCA_14_Handler,        /* 15 Peripheral DMA Controller */
         (void*) PDCA_15_Handler,        /* 16 Peripheral DMA Controller */
         (void*) CRCCU_Handler,          /* 17 CRC Calculation Unit */
-#ifdef USBC_IRQn
+#ifdef ID_USBC
         (void*) USBC_Handler,           /* 18 USB 2.0 Interface */
 #else
         (void*) (0UL), /* Reserved */
 #endif
         (void*) PEVC_TR_Handler,        /* 19 Peripheral Event Controller */
         (void*) PEVC_OV_Handler,        /* 20 Peripheral Event Controller */
-#ifdef AESA_IRQn
+#ifdef ID_AESA
         (void*) AESA_Handler,           /* 21 Advanced Encryption Standard */
 #else
         (void*) (0UL), /* Reserved */
@@ -273,7 +273,7 @@ const DeviceVectors exception_table = {
         (void*) PTC_Handler,            /* 76  */
         (void*) TWIM2_Handler,          /* 77 Two-wire Master Interface 2 */
         (void*) TWIM3_Handler,          /* 78 Two-wire Master Interface 3 */
-#ifdef LCDCA_IRQn
+#ifdef ID_LCDCA
         (void*) LCDCA_Handler           /* 79 LCD Controller */
 #else
         (void*) (0UL)  /* Reserved */

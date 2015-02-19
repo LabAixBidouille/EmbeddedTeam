@@ -57,7 +57,6 @@
 #define REG_EIC_WAKEUP             (0x40001814U) /**< \brief (EIC) Wake-Up Enable */
 #define REG_EIC_CONFIG0            (0x40001818U) /**< \brief (EIC) Configuration 0 */
 #define REG_EIC_CONFIG1            (0x4000181CU) /**< \brief (EIC) Configuration 1 */
-#define REG_EIC_CONFIG2            (0x40001820U) /**< \brief (EIC) Configuration 2 */
 #else
 #define REG_EIC_CTRL               (*(RwReg8 *)0x40001800U) /**< \brief (EIC) Control */
 #define REG_EIC_STATUS             (*(RoReg8 *)0x40001801U) /**< \brief (EIC) Status */
@@ -70,11 +69,10 @@
 #define REG_EIC_WAKEUP             (*(RwReg  *)0x40001814U) /**< \brief (EIC) Wake-Up Enable */
 #define REG_EIC_CONFIG0            (*(RwReg  *)0x40001818U) /**< \brief (EIC) Configuration 0 */
 #define REG_EIC_CONFIG1            (*(RwReg  *)0x4000181CU) /**< \brief (EIC) Configuration 1 */
-#define REG_EIC_CONFIG2            (*(RwReg  *)0x40001820U) /**< \brief (EIC) Configuration 2 */
 #endif /* (defined(__ASSEMBLY__) || defined(__IAR_SYSTEMS_ASM__)) */
 
 /* ========== Instance parameters for EIC peripheral ========== */
-#define EIC_CONFIG_NUM              3        // Number of CONFIG registers
+#define EIC_CONFIG_NUM              2        // Number of CONFIG registers
 #define EIC_GCLK_ID                 5        // Index of Generic Clock
 
 #endif /* _SAMD21_EIC_INSTANCE_ */

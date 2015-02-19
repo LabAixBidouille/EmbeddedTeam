@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------------
  *         SAM Software Package License
  * ----------------------------------------------------------------------------
- * Copyright (c) 2014, Atmel Corporation
+ * Copyright (c) 2015, Atmel Corporation
  *
  * All rights reserved.
  *
@@ -29,14 +29,8 @@
 #ifndef _SAMD11_
 #define _SAMD11_
 
-#if defined (__SAMD11C13A__)
-#include "samd11c13a.h"
-#elif defined (__SAMD11C14A__)
+#if defined (__SAMD11C14A__)
 #include "samd11c14a.h"
-#elif defined (__SAMD11D13AM__)
-#include "samd11d13am.h"
-#elif defined (__SAMD11D13AS__)
-#include "samd11d13as.h"
 #elif defined (__SAMD11D14AS__)
 #include "samd11d14as.h"
 #elif defined (__SAMD11D14AM__)
