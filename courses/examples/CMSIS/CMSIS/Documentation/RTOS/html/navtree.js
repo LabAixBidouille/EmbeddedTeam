@@ -2,7 +2,8 @@ var NAVTREE =
 [
   [ "CMSIS-RTOS", "index.html", [
     [ "Overview", "index.html", null ],
-    [ "Using a CMSIS RTOS Implementation", "_using_o_s.html", null ],
+    [ "Revision History of CMSIS-RTOS API", "rtos_revision_history.html", null ],
+    [ "Using a CMSIS-RTOS Implementation", "_using_o_s.html", null ],
     [ "Function Overview", "_function_overview.html", null ],
     [ "Header File Template: cmsis_os.h", "cmsis_os_h.html", null ],
     [ "Reference", "modules.html", "modules" ],

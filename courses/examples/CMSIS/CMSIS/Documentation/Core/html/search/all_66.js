@@ -9,6 +9,7 @@ var searchData=
   ['fpcar',['FPCAR',['../struct_f_p_u___type.html#aa48253f088dc524de80c42fbc995f66b',1,'FPU_Type']]],
   ['fpccr',['FPCCR',['../struct_f_p_u___type.html#a22054423086a3daf2077fb2f3fe2a8b8',1,'FPU_Type']]],
   ['fpdscr',['FPDSCR',['../struct_f_p_u___type.html#a4d58ef3ebea69a5ec5acd8c90a9941b6',1,'FPU_Type']]],
+  ['fpu_20functions_20_28only_20cortex_2dm7_29',['FPU Functions (only Cortex-M7)',['../group__fpu__functions__m7.html',1,'']]],
   ['fpu_5ftype',['FPU_Type',['../struct_f_p_u___type.html',1,'']]],
   ['fscr',['FSCR',['../struct_t_p_i___type.html#a377b78fe804f327e6f8b3d0f37e7bfef',1,'TPI_Type']]],
   ['function0',['FUNCTION0',['../struct_d_w_t___type.html#a5fbd9947d110cc168941f6acadc4a729',1,'DWT_Type']]],

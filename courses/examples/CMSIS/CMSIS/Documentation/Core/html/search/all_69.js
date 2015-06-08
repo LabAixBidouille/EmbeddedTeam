@@ -1,6 +1,7 @@
 var searchData=
 [
   ['iabr',['IABR',['../struct_n_v_i_c___type.html#a33e917b381e08dabe4aa5eb2881a7c11',1,'NVIC_Type']]],
+  ['i_2dcache_20functions',['I-Cache Functions',['../group___icache__functions__m7.html',1,'']]],
   ['icer',['ICER',['../struct_n_v_i_c___type.html#a1965a2e68b61d2e2009621f6949211a5',1,'NVIC_Type']]],
   ['icpr',['ICPR',['../struct_n_v_i_c___type.html#a46241be64208436d35c9a4f8552575c5',1,'NVIC_Type']]],
   ['icsr',['ICSR',['../struct_s_c_b___type.html#a3e66570ab689d28aebefa7e84e85dc4a',1,'SCB_Type']]],

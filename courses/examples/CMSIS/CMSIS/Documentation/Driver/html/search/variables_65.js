@@ -21,6 +21,7 @@ var searchData=
   ['event_5fdevice_5fready',['event_device_ready',['../group__nand__interface__gr.html#a5f347e9b63764bbb657f52dc20682128',1,'ARM_NAND_CAPABILITIES']]],
   ['event_5fdisconnect',['event_disconnect',['../group__usbh__host__gr.html#ab83941051cac8e19807b887354dc42fc',1,'ARM_USBH_CAPABILITIES']]],
   ['event_5fdsr',['event_dsr',['../group__usart__interface__gr.html#aefdb61f16498d650b5a7f5f9b62779df',1,'ARM_USART_CAPABILITIES']]],
+  ['event_5fframe_5ferror',['event_frame_error',['../group__sai__interface__gr.html#acc06ba75f18af9862d171426abc3273e',1,'ARM_SAI_CAPABILITIES']]],
   ['event_5fmode_5ffault',['event_mode_fault',['../group__spi__interface__gr.html#a309619714f0c4febaa497ebdb9b7e3ca',1,'ARM_SPI_CAPABILITIES']]],
   ['event_5fovercurrent',['event_overcurrent',['../group__usbh__host__gr.html#acd3087b3a4a7691595dd75568c12d696',1,'ARM_USBH_CAPABILITIES']]],
   ['event_5fready',['event_ready',['../group__flash__interface__gr.html#add296ba516c8fc17ba51e30f2a00f0a9',1,'ARM_FLASH_CAPABILITIES']]],

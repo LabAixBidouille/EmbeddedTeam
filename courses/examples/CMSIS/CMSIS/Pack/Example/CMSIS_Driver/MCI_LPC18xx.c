@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * Copyright (c) 2013-2014 ARM Ltd.
+ * Copyright (c) 2013-2015 ARM Ltd.
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -18,8 +18,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        12. May 2014
- * $Revision:    V2.01
+ * $Date:        22. January 2015
+ * $Revision:    V2.02
  *
  * Driver:       Driver_MCI0
  * Configured:   via RTE_Device.h configuration file
@@ -40,6 +40,9 @@
  */
 
 /* History:
+ *  Version 2.02
+ *    - High speed enabled under capabilities
+ *    - Block size handling added to SetupTransfer function
  *  Version 2.01
  *    - DMA descriptor handling corrected
  *    - Minor functional corrections
@@ -60,7 +63,7 @@
 #include "RTE_Device.h"
 #include "RTE_Components.h"
 
-#define ARM_MCI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,01)  /* driver version */
+#define ARM_MCI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(2,02)  /* driver version */
 
 #if (defined(RTE_Drivers_MCI0) && !RTE_SDMMC)
 #error "SDMMC not configured in RTE_Device.h!"
@@ -106,7 +109,7 @@ static const ARM_MCI_CAPABILITIES DriverCapabilities = {
   RTE_SDMMC_BUS_WIDTH_4 && RTE_SDMMC_BUS_WIDTH_8, /* data_width_8      */
   0,                                              /* data_width_4_ddr  */
   0,                                              /* data_width_8_ddr  */
-  0,                                              /* high_speed        */
+  1,                                              /* high_speed        */
   0,                                              /* uhs_signaling     */
   0,                                              /* uhs_tuning        */
   0,                                              /* uhs_sdr50         */
@@ -636,6 +639,7 @@ static int32_t SetupTransfer (uint8_t *data, uint32_t block_count, uint32_t bloc
   MCI.xfer.buf = data;
   MCI.xfer.cnt = block_count * block_size;
 
+  LPC_SDMMC->BLKSIZ = block_size;
   LPC_SDMMC->BYTCNT = MCI.xfer.cnt;
   
   SetupDMADescriptor (&MCI.xfer, true);
@@ -730,9 +734,15 @@ static int32_t Control (uint32_t control, uint32_t arg) {
       return (bps);
 
     case ARM_MCI_BUS_SPEED_MODE:
-      if (arg == ARM_MCI_BUS_DEFAULT_SPEED) {
-        /* Speed mode up to 25/26MHz */
-        return ARM_DRIVER_OK;
+      switch (arg) {
+        case ARM_MCI_BUS_DEFAULT_SPEED:
+          /* Speed mode up to 25/26MHz */
+        case ARM_MCI_BUS_HIGH_SPEED:
+          /* Speed mode up to 50MHz */
+          return ARM_DRIVER_OK;
+
+        default:
+          break;
       }
       return ARM_DRIVER_ERROR_UNSUPPORTED;
 

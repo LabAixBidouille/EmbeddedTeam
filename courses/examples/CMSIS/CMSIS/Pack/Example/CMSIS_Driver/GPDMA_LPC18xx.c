@@ -18,11 +18,16 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        24. April 2014
- * $Revision:    V1.00
+ * $Date:        3. November 2014
+ * $Revision:    V1.01
  *
  * Project:      GPDMA Driver for NXP LPC18xx
  * -------------------------------------------------------------------------- */
+ 
+/* History:
+ *  Version 1.01
+ *    - Updated Initialize and Uninitialize functions
+ */
 
 #include "LPC18xx.h"
 #include "GPDMA_LPC18xx.h"
@@ -41,6 +46,7 @@ typedef struct {
 static GPDMA_SignalEvent_t GPDMA_cb_event[GPDMA_NUMBER_OF_CHANNELS];
 
 static uint32_t Channel_active = 0;
+static uint32_t Init_cnt       = 0;
 
 #define GPDMA_CHANNEL(n)  ((GPDMA_CHANNEL_REG *) (&(LPC_GPDMA->C0SRCADDR) + (n * 8)))
 
@@ -86,6 +92,11 @@ static void Clear_Channel_active_flag (uint8_t ch) {
 int32_t GPDMA_Initialize (void) {
   uint32_t ch_num;
 
+  Init_cnt++;
+
+  // Chech if already initialized
+  if (Init_cnt > 1) return 0;
+
   // Enable DMA clock
   LPC_CCU1->CLK_M3_DMA_CFG |= 1;
   while ((LPC_CCU1->CLK_M3_DMA_STAT & 1) == 0);
@@ -116,6 +127,13 @@ int32_t GPDMA_Initialize (void) {
    - \b -1: function failed
 */
 int32_t GPDMA_Uninitialize (void) {
+
+  // Check if DMA is initialized
+  if (Init_cnt == 0) return -1;
+
+  Init_cnt--;
+  if (Init_cnt) return 0;
+
   // Disable DMA clock
   LPC_CCU1->CLK_M3_DMA_CFG &= ~1;
 

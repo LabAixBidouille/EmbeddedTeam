@@ -597,5 +597,17 @@
         <file category="source" name="CMSIS_Driver\USART_LPC18xx.c"/>
       </files>
     </component>
+
+    <component Cclass="CMSIS Driver" Cgroup="SAI" Csub="I2S" Capiversion="1.00" Cversion="1.00" condition="LPC1800 CMSIS SCU GPDMA">
+      <description>SAI (I2S) Driver for LPC1800 Series</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_SAI0                /* Driver SAI0 */
+        #define RTE_Drivers_SAI1                /* Driver SAI1 */
+      </RTE_Components_h>
+      <files>
+        <file category="source" name="RTE_Driver/I2S_LPC18xx.c"/>
+      </files>
+    </component>
+
   </components>
 </package>

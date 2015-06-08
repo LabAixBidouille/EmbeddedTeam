@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['d_2dcache_20functions',['D-Cache Functions',['../group___dcache__functions__m7.html',1,'']]],
   ['dcrdr',['DCRDR',['../struct_core_debug___type.html#ab8f4bb076402b61f7be6308075a789c9',1,'CoreDebug_Type']]],
   ['dcrsr',['DCRSR',['../struct_core_debug___type.html#afefa84bce7497652353a1b76d405d983',1,'CoreDebug_Type']]],
   ['debugmonitor_5firqn',['DebugMonitor_IRQn',['../group___n_v_i_c__gr.html#gga7e1129cd8a196f4284d41db3e82ad5c8a8e033fcef7aed98a31c60a7de206722c',1,'Ref_NVIC.txt']]],

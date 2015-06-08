@@ -18,8 +18,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        30. May 2014
- * $Revision:    V2.01
+ * $Date:        4. March 2015
+ * $Revision:    V2.03
  *
  * Driver:       Driver_ETH_MAC0
  * Configured:   via RTE_Device.h configuration file
@@ -34,6 +34,10 @@
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 2.03
+ *    - Corrected return value of PHY_Read and PHY_Write functions on timeout
+ *  Version 2.02
+ *    - GetMacAddress function implemented in Ethernet driver
  *  Version 2.01
  *    - Added Sleep mode and Wake-up on Magic Packet 
  *    - Improved robustness and error control
@@ -472,9 +476,28 @@ static int32_t PowerControl (ARM_POWER_STATE state) {
   \return      \ref execution_status
 */
 static int32_t GetMacAddress (ARM_ETH_MAC_ADDR *ptr_addr) {
+  uint32_t val;
 
-  /* Serialized MAC address not available */
-  return ARM_DRIVER_ERROR_UNSUPPORTED;
+  if (!ptr_addr) {
+    /* Invalid parameters */
+    return ARM_DRIVER_ERROR_PARAMETER;
+  }
+
+  if (!(emac.flags & EMAC_FLAG_POWER)) {
+    /* Driver not yet powered */
+    return ARM_DRIVER_ERROR;
+  }
+
+  val = ENET->MAC_ADDR0_HIGH;
+  ptr_addr->b[5] = (uint8_t)(val >> 8);
+  ptr_addr->b[4] = (uint8_t)(val);
+  val = ENET->MAC_ADDR0_LOW;
+  ptr_addr->b[3] = (uint8_t)(val >> 24);
+  ptr_addr->b[2] = (uint8_t)(val >> 16);
+  ptr_addr->b[1] = (uint8_t)(val >>  8);
+  ptr_addr->b[0] = (uint8_t)(val);
+
+  return ARM_DRIVER_OK;
 }
 
 /**
@@ -1008,6 +1031,10 @@ static int32_t PHY_Read (uint8_t phy_addr, uint8_t reg_addr, uint16_t *data) {
     }
   } while ((osKernelSysTick() - tick) < osKernelSysTickMicroSec(PHY_TIMEOUT));
 
+  if (!(ENET->MAC_MII_ADDR & EMAC_MMAR_GB)) {
+    *data = ENET->MAC_MII_DATA & EMAC_MMDR_GD;
+    return ARM_DRIVER_OK;
+  }
   return ARM_DRIVER_ERROR_TIMEOUT;
 }
 
@@ -1039,6 +1066,9 @@ static int32_t PHY_Write (uint8_t phy_addr, uint8_t reg_addr, uint16_t data) {
     }
   } while ((osKernelSysTick() - tick) < osKernelSysTickMicroSec(PHY_TIMEOUT));
 
+  if (!(ENET->MAC_MII_ADDR & EMAC_MMAR_GB)) {
+    return ARM_DRIVER_OK;
+  }
   return ARM_DRIVER_ERROR_TIMEOUT;
 }
 

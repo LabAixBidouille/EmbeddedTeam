@@ -18,13 +18,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        26. May 2014
- * $Revision:    V1.00
+ * $Date:        20. January 2015
+ * $Revision:    V1.01
  *
  * Project:      USB common (Device and Host) module for NXP LPC18xx
  * -------------------------------------------------------------------------- */
 
 /* History:
+ *  Version 1.01
+ *    - Improved support for Host and Device
  *  Version 1.00
  *    - Initial release
  */
@@ -37,27 +39,51 @@
 #include "RTE_Device.h"
 #include "RTE_Components.h"
 
-volatile uint32_t USB1_role = ARM_USB_ROLE_NONE;
+volatile uint8_t USB1_role  = ARM_USB_ROLE_NONE;
+volatile uint8_t USB1_state = 0;
 
-__weak void USBH1_IRQ (void) {};
-__weak void USBD1_IRQ (void) {};
+#ifdef RTE_Drivers_USBH1
+extern void USBH1_IRQ (void);
+#endif
+#ifdef RTE_Drivers_USBD1
+extern void USBD1_IRQ (void);
+#endif
+
+
+// Common IRQ Routine **********************************************************
 
 /**
   \fn          void USB1_IRQHandler (void)
   \brief       USB Interrupt Routine (IRQ).
 */
 void USB1_IRQHandler (void) {
+#if (defined(RTE_Drivers_USBH1) && defined(RTE_Drivers_USBD1))
   switch (USB1_role) {
+#ifdef RTE_Drivers_USBH1
     case ARM_USB_ROLE_HOST:
       USBH1_IRQ ();
       break;
+#endif
+#ifdef RTE_Drivers_USBD1
     case ARM_USB_ROLE_DEVICE:
       USBD1_IRQ ();
       break;
-    case ARM_USB_ROLE_NONE:
+#endif
+    default:
       break;
   }
+#else
+#ifdef RTE_Drivers_USBH1
+  USBH1_IRQ ();
+#else
+  USBD1_IRQ ();
+#endif
+#endif
+
 }
+
+
+// Public Functions ************************************************************
 
 /**
   \fn          void USB1_PinsConfigure (void)

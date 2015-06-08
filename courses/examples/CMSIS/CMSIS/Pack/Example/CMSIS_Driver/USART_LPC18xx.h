@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * Copyright (c) 2013-2014 ARM Ltd.
+ * Copyright (c) 2013-2015 ARM Ltd.
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -18,8 +18,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  *
- * $Date:        15. May 2014
- * $Revision:    V2.01
+ * $Date:        10. March 2015
+ * $Revision:    V2.02
  *
  * Project:      USART Driver Definitions for NXP LPC18xx
  * -------------------------------------------------------------------------- */
@@ -32,6 +32,11 @@
 
 #include "SCU_LPC18xx.h"
 #include "GPDMA_LPC18xx.h"
+
+// Clock Control Unit register
+#define CCU_CLK_CFG_RUN     (1 << 0)
+#define CCU_CLK_CFG_AUTO    (1 << 1)
+#define CCU_CLK_STAT_RUN    (1 << 0)
 
 // USART register interface definitions
 // USART Divisor Latch register LSB
@@ -110,6 +115,14 @@
 #define USART_FDR_MULVAL_POS         (      4)
 #define USART_FDR_MULVAL_MSK         (0x0F << USART_FDR_MULVAL_POS)
 
+// USART oversampling register
+#define USART_OSR_OSFRAC_POS         (      1)
+#define USART_OSR_OSFRAC_MSK         (7    << USART_OSR_OSFRAC_POS)
+#define USART_OSR_OSINT_POS          (      4)
+#define USART_OSR_OSINT_MSK          (0x0F << USART_OSR_OSINT_POS)
+#define USART_OSR_FDINT_POS          (      8)
+#define USART_OSR_FDINT_MSK          (0x7F << USART_OSR_FDINT_MSK)
+
 // USART Half duplex enable register
 #define USART_HDEN_HDEN              (1 << 0)
 
@@ -173,14 +186,107 @@
 #define USART_SYNC_MODE_TX_RX        (USART_SYNC_MODE_TX | \
                                       USART_SYNC_MODE_RX)
 
+
+#define FRACT_BITS                   ( 12  )
+#define FRACT_MASK                   (0XFFF)
+
+#define FIXED_OVERSAMPLING_DIVIDER_LIMIT   (51  << FRACT_BITS)
+#define INTEGER_OVERSAMPLING_DIVIDER_LIMIT ((12 << FRACT_BITS) + (8 << FRACT_BITS) / 10)
+
 // Baudrate accepted error
-#define UART_ACCEPTED_BAUDRATE_ERROR ( 3 )
+#define USART_MAX_BAUDRATE_ERROR     ( 3 )
+#define USART_MAX_DIVIDER_ERROR      ( 3 )
 
 // USART TX FIFO trigger level
 #define USART_TRIG_LVL_1             (0x00)
 #define USART_TRIG_LVL_4             (0x40)
 #define USART_TRIG_LVL_8             (0x80)
 #define USART_TRIG_LVL_14            (0xC0)
+
+#define FRACT_DIV(add, mul)      { ((uint16_t)((1U << 12) + (((uint32_t)(add << 24) / (mul)) >> 12))), ((uint8_t) (((mul) << 4) | add)), }
+
+typedef struct _FRACT_DIV{
+  uint16_t val;
+  uint8_t  add_mul;
+} FRACT_DIV;
+
+const FRACT_DIV fract_div_lookup_table[] = {
+  {(1 << 12), 0},
+  FRACT_DIV(1,  15),
+  FRACT_DIV(1,  14),
+  FRACT_DIV(1,  13),
+  FRACT_DIV(1,  12),
+  FRACT_DIV(1,  11),
+  FRACT_DIV(1,  10),
+  FRACT_DIV(1,   9),
+  FRACT_DIV(1,   8),
+  FRACT_DIV(2,  15),
+  FRACT_DIV(1,   7),
+  FRACT_DIV(2,  13),
+  FRACT_DIV(1,   6),
+  FRACT_DIV(2,  11),
+  FRACT_DIV(1,   5),
+  FRACT_DIV(3,  14),
+  FRACT_DIV(2,   9),
+  FRACT_DIV(3,  13),
+  FRACT_DIV(1,   4),
+  FRACT_DIV(4,  15),
+  FRACT_DIV(3,  11),
+  FRACT_DIV(2,   7),
+  FRACT_DIV(3,  10),
+  FRACT_DIV(4,  13),
+  FRACT_DIV(1,   3),
+  FRACT_DIV(5,  14),
+  FRACT_DIV(4,  11),
+  FRACT_DIV(3,   8),
+  FRACT_DIV(5,  13),
+  FRACT_DIV(2,   5),
+  FRACT_DIV(5,  12),
+  FRACT_DIV(3,   7),
+  FRACT_DIV(4,   9),
+  FRACT_DIV(5,  11),
+  FRACT_DIV(6,  13),
+  FRACT_DIV(7,  15),
+  FRACT_DIV(1,   2),
+  FRACT_DIV(8,  15),
+  FRACT_DIV(7,  13),
+  FRACT_DIV(6,  11),
+  FRACT_DIV(5,   9),
+  FRACT_DIV(4,   7),
+  FRACT_DIV(7,  12),
+  FRACT_DIV(3,   5),
+  FRACT_DIV(8,  13),
+  FRACT_DIV(5,   8),
+  FRACT_DIV(7,  11),
+  FRACT_DIV(9,  14),
+  FRACT_DIV(2,   3),
+  FRACT_DIV(9,  13),
+  FRACT_DIV(7,  10),
+  FRACT_DIV(5,   7),
+  FRACT_DIV(8,  11),
+  FRACT_DIV(11, 15),
+  FRACT_DIV(3,   4),
+  FRACT_DIV(10, 13),
+  FRACT_DIV(7,   9),
+  FRACT_DIV(11, 14),
+  FRACT_DIV(4,   5),
+  FRACT_DIV(9,  11),
+  FRACT_DIV(5,   6),
+  FRACT_DIV(11, 13),
+  FRACT_DIV(6,   7),
+  FRACT_DIV(13, 15),
+  FRACT_DIV(7,   8),
+  FRACT_DIV(8,   9),
+  FRACT_DIV(9,  10),
+  FRACT_DIV(10, 11),
+  FRACT_DIV(11, 12),
+  FRACT_DIV(12, 13),
+  FRACT_DIV(13, 14),
+  FRACT_DIV(14, 15)
+};
+
+// Fractional divider lookup table size
+#define FRACT_DIV_LOOKUP_TABLE_SZ  (sizeof(fract_div_lookup_table) / sizeof(fract_div_lookup_table[0]))
 
 // USART Transfer Information (Run-Time)
 typedef struct _USART_TRANSFER_INFO {
@@ -255,6 +361,7 @@ typedef struct {
   USART_DMA              *dma_tx;
   USART_DMA              *dma_rx;
   USART_INFO             *info;          // Run-Time Information
+  float                   sc_oversamp;   // SmartCard oversampling ratio
 } const USART_RESOURCES;
 
 #endif /* __USART_LPC18XX_H */

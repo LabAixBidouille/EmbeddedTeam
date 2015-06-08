@@ -2,6 +2,7 @@ var NAVTREE =
 [
   [ "CMSIS-Driver", "index.html", [
     [ "Overview", "index.html", null ],
+    [ "Revision History of CMSIS-Driver", "driver_revision_history.html", null ],
     [ "Theory of Operation", "_theory_operation.html", [
       [ "Data Transfer Functions", "_theory_operation.html#Data_Xfer_Functions", null ],
       [ "Driver Functions", "_theory_operation.html#DriverFunctions", null ],
@@ -29,9 +30,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_driver___common_8h.html#ga47d6d7c31f88f3b8ae4aaf9d8444afa5a9ef9e57cbcc948d0e22314e73dc8c434",
-"group__eth__mac__interface__gr.html#struct_a_r_m___d_r_i_v_e_r___e_t_h___m_a_c",
-"group__mci__interface__gr.html#gaec0506a2aa4ae75cf6bc02528f36fe30",
-"group__usart__clock__phase.html"
+"group__eth__mac__interface__gr.html#gaa7c6865fb09754be869778142466c5e4",
+"group__mci__interface__gr.html#ga6f34d4ab362e596ddaf23aac093268cf",
+"group__sai__interface__gr.html#a808b1f9e0abc3fa67945899cfc9fccc1",
+"group__usbd__interface__gr.html#a0cc21434bc57e696fabf0207925fe5ff"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

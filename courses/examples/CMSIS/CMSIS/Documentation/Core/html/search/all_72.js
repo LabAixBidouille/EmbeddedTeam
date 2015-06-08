@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['revision_20history_20of_20cmsis_2dcore',['Revision History of CMSIS-CORE',['../core_revision_history.html',1,'']]],
   ['rasr',['RASR',['../struct_m_p_u___type.html#adc65d266d15ce9ba57b3d127e8267f03',1,'MPU_Type']]],
   ['rasr_5fa1',['RASR_A1',['../struct_m_p_u___type.html#a94222f9a8637b5329016e18f08af7185',1,'MPU_Type']]],
   ['rasr_5fa2',['RASR_A2',['../struct_m_p_u___type.html#a0aac7727a6225c6aa00627c36d51d014',1,'MPU_Type']]],
